@@ -1,0 +1,32 @@
+/db/*
+
+.DS_Store
+*.class
+*.log
+dependency-reduced-pom.xml
+
+# Package Files #
+*.jar
+*.war
+*.ear
+target/
+
+*/config_override/*
+config_override/*
+
+#IDE files#
+.idea/
+*.iml
+/.idea
+/.settings
+/.project
+/.classpath
+
+configservice/.classpath
+configservice/.project
+configservice/.settings/
+
+docker/resources/
+
+artifacts/
+env-file
