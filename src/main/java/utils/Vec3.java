@@ -111,4 +111,9 @@ public class Vec3 {
     public int getSign(Vec3 v) {
         return (y*v.x > x*v.y)?-1:1;
     }
+
+    @Override
+    public String toString() {
+        return "X: " + x + " Y: " + y + " Z: " + z;
+    }
 }

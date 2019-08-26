@@ -32,6 +32,10 @@ public class VisionUtils {
         return false; // Doesn't fall in any of the above cases
     }
 
+    public static Point rotate(double angle, int length, Point start) {
+        return rotate(angle, length, start.x, start.y);
+    }
+
     public static Point rotate(double angle, int length, Vec3 start) {
         return rotate(angle, length, start.x, start.y);
     }
