@@ -8,17 +8,24 @@ public class Line {
     private final int startY;
     private final int endX;
     private final int endY;
+    private final int number;
 
     public Line(
+        int number,
         int startX,
         int startY,
         int endX,
         int endY
     ) {
+        this.number = number;
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
         this.endY = endY;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public int getStartX() {

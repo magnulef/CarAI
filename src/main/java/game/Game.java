@@ -2,6 +2,7 @@ package game;
 
 import game.renderables.Car;
 import game.renderables.Edge;
+import game.renderables.RewardGates;
 import game.renderables.Track;
 
 import java.awt.*;
@@ -22,8 +23,8 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(new KeyInput());
 
         this.handler.addGameObject(new Track());
+        this.handler.addGameObject(new RewardGates(false));
         this.handler.addGameObject(new Car(handler));
-        //this.handler.addGameObject(new Edge(500, 300, 500, 700));
     }
 
     public synchronized void start() {

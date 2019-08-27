@@ -40,7 +40,7 @@ public class Car extends GameObject {
     private final Handler handler;
 
     public Car(Handler handler) {
-        position = new Vec3(200, 200, 0);
+        position = new Vec3(100, 200, 0);
         direction = new Vec3(0, 1, 0);
         velocity = new Vec3();
         acceleration = new Vec3();

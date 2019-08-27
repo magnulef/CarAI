@@ -12,10 +12,22 @@ public class Track extends GameObject {
 
     public Track() {
         //Edge box
-        LINES.add(new Line(10, 10, 990, 10));
-        LINES.add(new Line(990, 10, 990, 970));
-        LINES.add(new Line(10, 970, 990, 970));
-        LINES.add(new Line(10, 10, 10, 970));
+        LINES.add(new Line(0,10, 10, 990, 10));
+        LINES.add(new Line(0,990, 10, 990, 970));
+        LINES.add(new Line(0,10, 970, 990, 970));
+        LINES.add(new Line(0,10, 10, 10, 970));
+
+        //Track
+        LINES.add(new Line(0,180, 150, 180, 500));
+        LINES.add(new Line(0,10, 650, 350, 650));
+        LINES.add(new Line(0,350, 650, 350, 400));
+        LINES.add(new Line(0,180, 250, 500, 250));
+        LINES.add(new Line(0,500, 250, 500, 800));
+        LINES.add(new Line(0,500, 800, 180, 800));
+        LINES.add(new Line(0,700, 970, 700, 400));
+        LINES.add(new Line(0,500, 250, 850, 250));
+        LINES.add(new Line(0,850, 150, 850, 800));
+        LINES.add(new Line(0,500, 10, 500, 180));
     }
 
     @Override
