@@ -1,11 +1,15 @@
 package game.renderables;
 
 import game.Handler;
+import game.valueobjects.Line;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.List;
 import utils.Keyboard;
 import utils.Vec3;
 import utils.VisionUtils;
-
-import java.awt.*;
 
 public class Car extends GameObject {
 
@@ -168,21 +172,18 @@ public class Car extends GameObject {
 
     //TODO just for show
     private void addVisionLines() {
-        Point staticStart = new Point(500, 300);
-        Point staticEnd = new Point(500, 700);
-
         double angle = Math.atan2(direction.x, direction.y);
         Point start = new Point((int) position.x, (int) position.y);
 
-        FRONT = addVisionLine(angle, 0, start, 200, staticStart, staticEnd, "FRONT", FRONT);
+        FRONT = addVisionLine(angle, 0, start, 200, FRONT);
         handler.addGameObject(FRONT);
-        RIGHTFRONT = addVisionLine(angle, 0.55, start, 200, staticStart, staticEnd, "RIGHT FRONT",RIGHTFRONT);
+        RIGHTFRONT = addVisionLine(angle, 0.55, start, 200, RIGHTFRONT);
         handler.addGameObject(RIGHTFRONT);
-        RIGHT = addVisionLine(angle, 1.35, start, 200, staticStart, staticEnd, "RIGHT", RIGHT);
+        RIGHT = addVisionLine(angle, 1.35, start, 200, RIGHT);
         handler.addGameObject(RIGHT);
-        LEFTFRONT = addVisionLine(angle, -0.55, start, 200, staticStart, staticEnd, "LEFT FRONT", LEFTFRONT);
+        LEFTFRONT = addVisionLine(angle, -0.55, start, 200, LEFTFRONT);
         handler.addGameObject(LEFTFRONT);
-        LEFT = addVisionLine(angle, -1.35, start, 200, staticStart, staticEnd, "LEFT", LEFT);
+        LEFT = addVisionLine(angle, -1.35, start, 200, LEFT);
         handler.addGameObject(LEFT);
     }
 
@@ -192,26 +193,40 @@ public class Car extends GameObject {
     private GameObject LEFTFRONT = null;
     private GameObject LEFT = null;
 
-    private GameObject addVisionLine(double angle, double angleOffset, Point start, int length, Point staticStart, Point staticEnd, String debugString, GameObject gameObject) {
+    private GameObject addVisionLine(double angle, double angleOffset, Point start, int length, GameObject gameObject) {
         if (gameObject != null) {
             handler.removeGameObject(gameObject);
         }
 
         Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
 
-        boolean doIntersectRightFront = VisionUtils.doIntersect(
-            start,
-            rotatedEndPoint,
-            staticStart,
-            staticEnd
-        );
-
-        if (doIntersectRightFront) {
-            Point intersectionPoint = VisionUtils.findIntersection(start, VisionUtils.rotate(angle + angleOffset, length, position), staticStart, staticEnd);
-            double distance = VisionUtils.calculateDistanceBetweenPoints(start.x, start.y, intersectionPoint.x, intersectionPoint.y);
+        Point intersectionPoint = doIntersect(start, rotatedEndPoint);
+        if (intersectionPoint != null) {
             return new VisionLine(start, null, intersectionPoint);
         }
 
         return new VisionLine(start, rotatedEndPoint, null);
+    }
+
+    private Point doIntersect(Point start, Point end) {
+        List<Line> lines = Track.getLines();
+
+        for (Line line : lines) {
+
+            Point lineStart = line.getStart();
+            Point lineEnd = line.getEnd();
+            boolean doesIntersect = VisionUtils.doIntersect(
+                start,
+                end,
+                line.getStart(),
+                line.getEnd()
+            );
+
+            if (doesIntersect) {
+                return VisionUtils.findIntersection(start, end, lineStart, lineEnd);
+            }
+        }
+
+        return null;
     }
 }

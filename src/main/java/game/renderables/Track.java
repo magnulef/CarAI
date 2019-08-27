@@ -34,4 +34,8 @@ public class Track extends GameObject {
             graphics.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
         }
     }
+
+    public static List<Line> getLines() {
+        return LINES;
+    }
 }

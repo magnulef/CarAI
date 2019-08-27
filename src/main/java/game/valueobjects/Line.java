@@ -1,5 +1,7 @@
 package game.valueobjects;
 
+import java.awt.Point;
+
 public class Line {
 
     private final int startX;
@@ -33,5 +35,13 @@ public class Line {
 
     public int getEndY() {
         return endY;
+    }
+
+    public Point getStart() {
+        return new Point(startX, startY);
+    }
+
+    public Point getEnd() {
+        return new Point(endX, endY);
     }
 }
