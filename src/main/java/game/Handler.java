@@ -1,5 +1,7 @@
 package game;
 
+import game.renderables.GameObject;
+
 import java.awt.*;
 import java.util.LinkedList;
 

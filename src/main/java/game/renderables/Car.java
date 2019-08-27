@@ -1,12 +1,11 @@
-package game;
+package game.renderables;
 
+import game.Handler;
 import utils.Keyboard;
 import utils.Vec3;
 import utils.VisionUtils;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Car extends GameObject {
 
@@ -15,8 +14,8 @@ public class Car extends GameObject {
     private static final double DRAG = 0.4257;
     private static final double ROLLING_RESISTANCE = 12.8;
     private static final double TYRE = 0.6; //0.6
-    private static final int WIDTH = 40;
-    private static final int HEIGHT = 60;
+    private static final int WIDTH = 20;
+    private static final int HEIGHT = 40;
 
     private Vec3 position;
     private Vec3 direction;
@@ -158,7 +157,7 @@ public class Car extends GameObject {
         graphics2D.rotate(angle, position.x, position.y + 0);
         graphics2D.setColor(Color.BLACK);
 
-        graphics2D.fillRect((int) (position.x-20), (int) (position.y-30), WIDTH, HEIGHT);
+        graphics2D.fillRect((int) (position.x-(WIDTH/2)), (int) (position.y-(HEIGHT/2)), WIDTH, HEIGHT);
     }
 
     private void addDrift() {
@@ -172,9 +171,8 @@ public class Car extends GameObject {
         Point staticStart = new Point(500, 300);
         Point staticEnd = new Point(500, 700);
 
-
         double angle = Math.atan2(direction.x, direction.y);
-        Point start = new Point((int)position.x, (int)position.y);
+        Point start = new Point((int) position.x, (int) position.y);
 
         FRONT = addVisionLine(angle, 0, start, 200, staticStart, staticEnd, "FRONT", FRONT);
         handler.addGameObject(FRONT);
@@ -202,10 +200,10 @@ public class Car extends GameObject {
         Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
 
         boolean doIntersectRightFront = VisionUtils.doIntersect(
-                start,
-                rotatedEndPoint,
-                staticStart,
-                staticEnd
+            start,
+            rotatedEndPoint,
+            staticStart,
+            staticEnd
         );
 
         if (doIntersectRightFront) {

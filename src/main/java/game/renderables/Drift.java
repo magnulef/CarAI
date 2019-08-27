@@ -1,4 +1,6 @@
-package game;
+package game.renderables;
+
+import game.Handler;
 
 import java.awt.*;
 
