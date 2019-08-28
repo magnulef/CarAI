@@ -48,7 +48,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>8</release> <!-- DL4J requires 8 -->
                     <!--<source>11.0.4</source>
                     <target>11.0.4</target>-->
                     <!--<source>${java.version}</source>

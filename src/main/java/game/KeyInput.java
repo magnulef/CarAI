@@ -7,13 +7,23 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
 
+    private final boolean keyBoardEnabled;
+
+    public KeyInput(boolean keyBoardEnabled) {
+        this.keyBoardEnabled = keyBoardEnabled;
+    }
+
     @Override
     public void keyPressed(KeyEvent event) {
-        Keyboard.keydown[event.getKeyCode()] = true;
+        if (keyBoardEnabled) {
+            Keyboard.keydown[event.getKeyCode()] = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent event) {
-        Keyboard.keydown[event.getKeyCode()] = false;
+        if (keyBoardEnabled) {
+            Keyboard.keydown[event.getKeyCode()] = false;
+        }
     }
 }

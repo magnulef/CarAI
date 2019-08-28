@@ -200,33 +200,11 @@ public class Car extends GameObject {
 
         Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
 
-        Point intersectionPoint = doIntersect(start, rotatedEndPoint);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
         if (intersectionPoint != null) {
             return new VisionLine(start, null, intersectionPoint);
         }
 
         return new VisionLine(start, rotatedEndPoint, null);
-    }
-
-    private Point doIntersect(Point start, Point end) {
-        List<Line> lines = Track.getLines();
-
-        for (Line line : lines) {
-
-            Point lineStart = line.getStart();
-            Point lineEnd = line.getEnd();
-            boolean doesIntersect = VisionUtils.doIntersect(
-                start,
-                end,
-                line.getStart(),
-                line.getEnd()
-            );
-
-            if (doesIntersect) {
-                return VisionUtils.findIntersection(start, end, lineStart, lineEnd);
-            }
-        }
-
-        return null;
     }
 }

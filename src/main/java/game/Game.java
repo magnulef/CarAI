@@ -20,7 +20,7 @@ public class Game extends Canvas implements Runnable {
     public Game() {
         this.handler = new Handler();
         new Window(WIDTH, HEIGHT, "CarAI", this);
-        this.addKeyListener(new KeyInput());
+        this.addKeyListener(new KeyInput(true));
 
         this.handler.addGameObject(new Track());
         this.handler.addGameObject(new RewardGates(false));

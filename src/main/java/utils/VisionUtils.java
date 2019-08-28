@@ -1,8 +1,33 @@
 package utils;
 
+import game.renderables.Track;
+import game.valueobjects.Line;
 import java.awt.*;
+import java.util.List;
 
 public class VisionUtils {
+
+    public static Point doIntersect(Point start, Point end) {
+        List<Line> lines = Track.getLines();
+
+        for (Line line : lines) {
+
+            Point lineStart = line.getStart();
+            Point lineEnd = line.getEnd();
+            boolean doesIntersect = VisionUtils.doIntersect(
+                start,
+                end,
+                line.getStart(),
+                line.getEnd()
+            );
+
+            if (doesIntersect) {
+                return VisionUtils.findIntersection(start, end, lineStart, lineEnd);
+            }
+        }
+
+        return null;
+    }
 
     public static boolean doIntersect(Point p1, Point q1, Point p2, Point q2) {
         // Find the four orientations needed for general and
