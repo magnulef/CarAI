@@ -116,6 +116,13 @@ public class VisionUtils {
     }
 
     public static double calculateDistanceBetweenPoints(
+        Point start,
+        Point end
+    ) {
+        return calculateDistanceBetweenPoints(start.x, start.y, end.x, end.y);
+    }
+
+    public static double calculateDistanceBetweenPoints(
             double x1,
             double y1,
             double x2,

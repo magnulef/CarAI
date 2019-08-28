@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.util.List;
 import utils.Keyboard;
 import utils.Vec3;
+import utils.VisionInput;
 import utils.VisionUtils;
 
 public class Car extends GameObject {
@@ -202,6 +203,7 @@ public class Car extends GameObject {
 
         Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
         if (intersectionPoint != null) {
+            double distance = VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
             return new VisionLine(start, null, intersectionPoint);
         }
 
