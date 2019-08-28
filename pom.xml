@@ -9,13 +9,18 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <parent>
+        <groupId>maven</groupId>
+        <artifactId>parent-pom</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <properties>
         <dl4j.version>0.9.1</dl4j.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>org.nd4j</groupId>
                 <artifactId>nd4j-native-platform</artifactId>
@@ -32,6 +37,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>lib</groupId>
+            <artifactId>json-lib</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
         </dependency>
@@ -39,6 +48,12 @@
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

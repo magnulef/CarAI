@@ -176,15 +176,15 @@ public class Car extends GameObject {
         double angle = Math.atan2(direction.x, direction.y);
         Point start = new Point((int) position.x, (int) position.y);
 
-        FRONT = addVisionLine(angle, 0, start, 200, FRONT);
+        FRONT = addVisionLine(angle, 0, start, 200, FRONT, VisionInput.VISION_DIRECTION.FRONT);
         handler.addGameObject(FRONT);
-        RIGHTFRONT = addVisionLine(angle, 0.55, start, 200, RIGHTFRONT);
+        RIGHTFRONT = addVisionLine(angle, 0.55, start, 200, RIGHTFRONT, VisionInput.VISION_DIRECTION.FRONT_RIGHT);
         handler.addGameObject(RIGHTFRONT);
-        RIGHT = addVisionLine(angle, 1.35, start, 200, RIGHT);
+        RIGHT = addVisionLine(angle, 1.35, start, 200, RIGHT, VisionInput.VISION_DIRECTION.RIGHT);
         handler.addGameObject(RIGHT);
-        LEFTFRONT = addVisionLine(angle, -0.55, start, 200, LEFTFRONT);
+        LEFTFRONT = addVisionLine(angle, -0.55, start, 200, LEFTFRONT, VisionInput.VISION_DIRECTION.FRONT_LEFT);
         handler.addGameObject(LEFTFRONT);
-        LEFT = addVisionLine(angle, -1.35, start, 200, LEFT);
+        LEFT = addVisionLine(angle, -1.35, start, 200, LEFT, VisionInput.VISION_DIRECTION.LEFT);
         handler.addGameObject(LEFT);
     }
 
@@ -194,7 +194,7 @@ public class Car extends GameObject {
     private GameObject LEFTFRONT = null;
     private GameObject LEFT = null;
 
-    private GameObject addVisionLine(double angle, double angleOffset, Point start, int length, GameObject gameObject) {
+    private GameObject addVisionLine(double angle, double angleOffset, Point start, int length, GameObject gameObject, VisionInput.VISION_DIRECTION direction) {
         if (gameObject != null) {
             handler.removeGameObject(gameObject);
         }
@@ -203,10 +203,21 @@ public class Car extends GameObject {
 
         Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
         if (intersectionPoint != null) {
-            double distance = VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+            setVisionInput(VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint), direction);
             return new VisionLine(start, null, intersectionPoint);
         }
 
+        setVisionInput(0, direction);
         return new VisionLine(start, rotatedEndPoint, null);
+    }
+
+    private void setVisionInput(double distance, VisionInput.VISION_DIRECTION direction) {
+        switch (direction) {
+            case FRONT: VisionInput.front = distance;
+            case FRONT_RIGHT: VisionInput.front_right = distance;
+            case FRONT_LEFT: VisionInput.front_left = distance;
+            case LEFT: VisionInput.left = distance;
+            case RIGHT: VisionInput.right = distance;
+        }
     }
 }
