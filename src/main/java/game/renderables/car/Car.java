@@ -4,10 +4,15 @@ import game.Handler;
 import game.ai.Actions;
 import game.ai.NeuralNetwork;
 import game.renderables.GameObject;
+import game.renderables.Track;
 import game.valueobjects.InputContract;
+import game.valueobjects.Line;
 import game.valueobjects.VisionContract;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.List;
 import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
@@ -51,100 +56,73 @@ public class Car extends GameObject {
     private boolean keyLeft;
     private boolean keyBreak;
 
+    private boolean isDead;
+    private final boolean isDeathEnabled;
+
     public Car(
         Handler handler,
         Map<String, INDArray> previousWeights,
         boolean keyBoardEnabled,
         boolean shouldRender,
-        boolean renderVisionLines
+        boolean renderVisionLines,
+        boolean isDeathEnabled
     ) {
-        position = new Vec3(100, 200, 0);
-        direction = new Vec3(0, 1, 0);
-        velocity = new Vec3();
-        acceleration = new Vec3();
-        breakingForce = new Vec3();
-        engineForce = 0;
-        traction = new Vec3();
-        dragForce = new Vec3();
-        rollingResistanceForce = new Vec3();
-        longitudinalForce = new Vec3();
+        this.position = new Vec3(100, 200, 0);
+        this.direction = new Vec3(0, 1, 0);
+        this.velocity = new Vec3();
+        this.acceleration = new Vec3();
+        this.breakingForce = new Vec3();
+        this.engineForce = 0;
+        this.traction = new Vec3();
+        this.dragForce = new Vec3();
+        this.rollingResistanceForce = new Vec3();
+        this.longitudinalForce = new Vec3();
         this.handler = handler;
-        neuralNetwork = new NeuralNetwork(previousWeights);
+        this.neuralNetwork = new NeuralNetwork(previousWeights);
         this.keyBoardEnabled = keyBoardEnabled;
         this.carRenderer = new CarRenderer(shouldRender, renderVisionLines);
+        this.isDead = false;
+        this.isDeathEnabled = isDeathEnabled;
     }
 
-    private void setActions() {
-        if (keyBoardEnabled) {
-            keyDown = Keyboard.keydown[40];
-            keyUp = Keyboard.keydown[38];
-            keyRight = Keyboard.keydown[39];
-            keyLeft = Keyboard.keydown[37];
-            keyBreak = Keyboard.keydown[66];
-            return;
+    private boolean shouldDie() {
+        if (overlappingEdge() || intersectLine()) {
+            return true;
         }
 
-        keyDown = false;
-        keyUp = false;
-        keyRight = false;
-        keyLeft = false;
-        keyBreak = false;
-
-        Actions action = neuralNetwork.getAction(getInputs());
-
-        switch (action) {
-            case FORWARD:
-                keyUp = true;
-            case FORWARD_RIGHT:
-                keyUp = true;
-                keyRight = true;
-            case FORWARD_LEFT:
-                keyUp = true;
-                keyLeft = true;
-            case RIGHT:
-                keyRight = true;
-            case LEFT:
-                keyLeft = true;
-            case BREAK:
-                keyBreak = true;
-            case NOTHING:
-        }
+        return false;
     }
 
-    private InputContract getInputs() {
-        double angle = Math.atan2(direction.x, direction.y);
-        Point start = new Point((int) position.x, (int) position.y);
-
-        return InputContract.builder()
-            .withVisionContract(
-                VisionContract.builder()
-                    .withFrontVision(vision(angle, 0, start, 200))
-                    .withRightVision(vision(angle, 1.35, start, 200))
-                    .withLeftVision(vision(angle, -1.35, start, 200))
-                    .withFrontRightVision(vision(angle, 0.55, start, 200))
-                    .withFrontLeftVision(vision(angle, -1.35, start, 200))
-                    .build()
-            ).withDirectionX(
-                this.direction.x
-            ).withDirectionY(
-                this.direction.y
-            ).withVelocity(
-                this.velocity.getSize()
-            ).build();
+    private boolean overlappingEdge() {
+        return position.x - WIDTH/2 < 10 || position.x + WIDTH/2 > 990 || position.y - HEIGHT/2 < 10 || position.y + HEIGHT/2 > 970;
     }
 
-    private double vision(double angle, double angleOffset, Point start, int length) {
-        Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
-        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
-        if (intersectionPoint != null) {
-            return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+    private boolean intersectLine() {
+        Rectangle car = new Rectangle(
+            (int)(position.x - WIDTH/2),
+            (int) (position.y - HEIGHT/2),
+            WIDTH,
+            HEIGHT
+        );
+
+        for (Line line : Track.getLines()) {
+            boolean intersection = car.intersectsLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+            if (intersection) {
+                return true;
+            }
         }
 
-        return 500.00;
+        return false;
     }
 
     @Override
     public void tick() {
+        if (isDeathEnabled && (isDead || shouldDie())) {
+            isDead = true;
+            engineForce = 0;
+            return;
+        }
+
         setActions();
         double diff = TYRE * (velocity.getSize() / 30.0);
 
@@ -240,8 +218,77 @@ public class Car extends GameObject {
         position.add(velocity);
     }
 
+    private void setActions() {
+        if (keyBoardEnabled) {
+            keyDown = Keyboard.keydown[40];
+            keyUp = Keyboard.keydown[38];
+            keyRight = Keyboard.keydown[39];
+            keyLeft = Keyboard.keydown[37];
+            keyBreak = Keyboard.keydown[66];
+            return;
+        }
+
+        keyDown = false;
+        keyUp = false;
+        keyRight = false;
+        keyLeft = false;
+        keyBreak = false;
+
+        Actions action = neuralNetwork.getAction(getInputs());
+
+        switch (action) {
+            case FORWARD:
+                keyUp = true;
+            case FORWARD_RIGHT:
+                keyUp = true;
+                keyRight = true;
+            case FORWARD_LEFT:
+                keyUp = true;
+                keyLeft = true;
+            case RIGHT:
+                keyRight = true;
+            case LEFT:
+                keyLeft = true;
+            case BREAK:
+                keyBreak = true;
+            case NOTHING:
+        }
+    }
+
+    private InputContract getInputs() {
+        double angle = Math.atan2(direction.x, direction.y);
+        Point start = new Point((int) position.x, (int) position.y);
+
+        return InputContract.builder()
+            .withVisionContract(
+                VisionContract.builder()
+                    .withFrontVision(vision(angle, 0, start, 200))
+                    .withRightVision(vision(angle, 1.35, start, 200))
+                    .withLeftVision(vision(angle, -1.35, start, 200))
+                    .withFrontRightVision(vision(angle, 0.55, start, 200))
+                    .withFrontLeftVision(vision(angle, -1.35, start, 200))
+                    .build()
+            ).withDirectionX(
+                this.direction.x
+            ).withDirectionY(
+                this.direction.y
+            ).withVelocity(
+                this.velocity.getSize()
+            ).build();
+    }
+
+    private double vision(double angle, double angleOffset, Point start, int length) {
+        Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
+        if (intersectionPoint != null) {
+            return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+        }
+
+        return 500.00;
+    }
+
     @Override
     public void render(Graphics graphics) {
-        carRenderer.renderCar(graphics, direction, position, WIDTH, HEIGHT);
+        carRenderer.renderCar(graphics, direction, position, WIDTH, HEIGHT, isDead ? Color.RED : Color.BLACK);
     }
 }

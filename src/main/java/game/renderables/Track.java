@@ -9,13 +9,14 @@ import java.util.List;
 public class Track extends GameObject {
 
     private static final List<Line> LINES = new ArrayList<>();
+    private static final List<Line> EDGES = new ArrayList<>();
 
     static {
         //Edge box
-        LINES.add(new Line(0,10, 10, 990, 10));
-        LINES.add(new Line(0,990, 10, 990, 970));
-        LINES.add(new Line(0,10, 970, 990, 970));
-        LINES.add(new Line(0,10, 10, 10, 970));
+        EDGES.add(new Line(0,10, 10, 990, 10));
+        EDGES.add(new Line(0,990, 10, 990, 970));
+        EDGES.add(new Line(0,10, 970, 990, 970));
+        EDGES.add(new Line(0,10, 10, 10, 970));
 
         //Track
         LINES.add(new Line(0,180, 150, 180, 500));
@@ -45,6 +46,14 @@ public class Track extends GameObject {
         for (Line line : LINES) {
             graphics.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
         }
+
+        for (Line line : EDGES) {
+            graphics.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+        }
+    }
+
+    public static List<Line> getEdges() {
+        return EDGES;
     }
 
     public static List<Line> getLines() {

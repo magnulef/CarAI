@@ -29,6 +29,7 @@ public class Game extends Canvas implements Runnable {
                 null,
                 true,
                 true,
+                false,
                 false
             )
         );

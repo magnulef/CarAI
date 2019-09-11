@@ -25,7 +25,7 @@ public class CarRenderer {
         this.renderLines = renderLines;
     }
 
-    public void renderCar(Graphics graphics, Vec3 direction, Vec3 position, int width, int height) {
+    public void renderCar(Graphics graphics, Vec3 direction, Vec3 position, int width, int height, Color color) {
         if (!shouldRender) {
             return;
         }
@@ -35,7 +35,7 @@ public class CarRenderer {
         double angle = -Math.atan2(direction.x, direction.y);
 
         graphics2D.rotate(angle, position.x, position.y + 0);
-        graphics2D.setColor(Color.BLACK);
+        graphics2D.setColor(color);
 
         graphics2D.fillRect((int) (position.x-(width/2)), (int) (position.y-(height/2)), width, height);
     }
