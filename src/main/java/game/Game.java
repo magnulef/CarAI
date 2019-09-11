@@ -23,7 +23,15 @@ public class Game extends Canvas implements Runnable {
 
         this.handler.addGameObject(new Track());
         this.handler.addGameObject(new RewardGates(false));
-        this.handler.addGameObject(new Car(handler, null, true, true, false));
+        this.handler.addGameObject(
+            new Car(
+                handler,
+                null,
+                true,
+                true,
+                false
+            )
+        );
     }
 
     public synchronized void start() {
@@ -85,8 +93,6 @@ public class Game extends Canvas implements Runnable {
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.setColor(Color.DARK_GRAY);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
-        //graphics.setColor(Color.WHITE);
-        //graphics.drawLine(100, 0, 200, 0);
 
         handler.render(graphics);
 

@@ -10,7 +10,7 @@ public class Track extends GameObject {
 
     private static final List<Line> LINES = new ArrayList<>();
 
-    public Track() {
+    static {
         //Edge box
         LINES.add(new Line(0,10, 10, 990, 10));
         LINES.add(new Line(0,990, 10, 990, 970));

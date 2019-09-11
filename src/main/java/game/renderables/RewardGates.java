@@ -9,11 +9,8 @@ import java.util.List;
 public class RewardGates extends GameObject {
 
     private static final List<Line> LINES = new ArrayList<>();
-    private boolean shouldRender;
 
-    public RewardGates(boolean shouldRender) {
-        this.shouldRender = shouldRender;
-
+    static {
         LINES.add(new Line(0,15, 150, 175, 150));
         LINES.add(new Line(0,15, 300, 175, 300));
         LINES.add(new Line(0,15, 500, 175, 500));
@@ -53,6 +50,12 @@ public class RewardGates extends GameObject {
         LINES.add(new Line(0,350, 15, 350, 245));
         LINES.add(new Line(0,500, 185, 500, 245));
         LINES.add(new Line(0,675, 15, 675, 245));
+    }
+
+    private boolean shouldRender;
+
+    public RewardGates(boolean shouldRender) {
+        this.shouldRender = shouldRender;
     }
 
     @Override
