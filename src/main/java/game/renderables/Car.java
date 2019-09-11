@@ -1,12 +1,18 @@
 package game.renderables;
 
 import game.Handler;
+import game.ai.Actions;
+import game.ai.NeuralNetwork;
+import game.valueobjects.InputContract;
 import game.valueobjects.Line;
+import game.valueobjects.VisionContract;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.List;
+import java.util.Map;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
 import utils.Vec3;
 import utils.VisionInput;
@@ -39,8 +45,10 @@ public class Car extends GameObject {
     private boolean isDrifting;
 
     private final Handler handler;
+    private final NeuralNetwork neuralNetwork;
+    private final boolean keyBoardEnabled;
 
-    public Car(Handler handler) {
+    public Car(Handler handler, Map<String, INDArray> previousWeights, boolean keyBoardEnabled) {
         position = new Vec3(100, 200, 0);
         direction = new Vec3(0, 1, 0);
         velocity = new Vec3();
@@ -52,15 +60,93 @@ public class Car extends GameObject {
         rollingResistanceForce = new Vec3();
         longitudinalForce = new Vec3();
         this.handler = handler;
+        neuralNetwork = new NeuralNetwork(previousWeights);
+        this.keyBoardEnabled = keyBoardEnabled;
+    }
+
+    private boolean keyDown;
+    private boolean keyUp;
+    private boolean keyRight;
+    private boolean keyLeft;
+    private boolean keyBreak;
+
+    private void setActions() {
+        if (keyBoardEnabled) {
+            keyDown = Keyboard.keydown[40];
+            keyUp = Keyboard.keydown[38];
+            keyRight = Keyboard.keydown[39];
+            keyLeft = Keyboard.keydown[37];
+            keyBreak = Keyboard.keydown[66];
+            return;
+        }
+
+        keyDown = false;
+        keyUp = false;
+        keyRight = false;
+        keyLeft = false;
+        keyBreak = false;
+
+        Actions action = neuralNetwork.getAction(getInputs());
+
+        switch (action) {
+            case FORWARD:
+                keyUp = true;
+            case FORWARD_RIGHT:
+                keyUp = true;
+                keyRight = true;
+            case FORWARD_LEFT:
+                keyUp = true;
+                keyLeft = true;
+            case RIGHT:
+                keyRight = true;
+            case LEFT:
+                keyLeft = true;
+            case BREAK:
+                keyBreak = true;
+            case NOTHING:
+        }
+    }
+
+    private InputContract getInputs() {
+        double angle = Math.atan2(direction.x, direction.y);
+        Point start = new Point((int) position.x, (int) position.y);
+
+        return InputContract.builder()
+            .withVisionContract(
+                VisionContract.builder()
+                    .withFrontVision(vision(angle, 0, start, 200))
+                    .withRightVision(vision(angle, 1.35, start, 200))
+                    .withLeftVision(vision(angle, -1.35, start, 200))
+                    .withFrontRightVision(vision(angle, 0.55, start, 200))
+                    .withFrontLeftVision(vision(angle, -1.35, start, 200))
+                    .build()
+            ).withDirectionX(
+                this.direction.x
+            ).withDirectionY(
+                this.direction.y
+            ).withVelocity(
+                this.velocity.getSize()
+            ).build();
+    }
+
+    private double vision(double angle, double angleOffset, Point start, int length) {
+        Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
+        if (intersectionPoint != null) {
+            return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+        }
+
+        return 500.00;
     }
 
     @Override
     public void tick() {
+        setActions();
         double diff = TYRE * (velocity.getSize() / 30.0);
 
-        if (Keyboard.keydown[39]) {
+        if (keyRight) {
             direction.rotateZ(Math.toRadians((TYRE) * velocity.getSize()));
-        } else if (Keyboard.keydown[37]) {
+        } else if (keyLeft) {
             direction.rotateZ(Math.toRadians((-TYRE) * velocity.getSize()));
         }
 
@@ -72,10 +158,10 @@ public class Car extends GameObject {
             isDrifting = Math.abs(Math.toDegrees(diffAngle)) > 30;
         }
 
-        if (Keyboard.keydown[38]) {
+        if (keyUp) {
             engineForce = 300;
         }
-        else if (Keyboard.keydown[40]) {
+        else if (keyDown) {
             engineForce = -100;
         }
         else  {
@@ -96,7 +182,7 @@ public class Car extends GameObject {
         calculatePosition(1);
 
         addDrift();
-        addVisionLines();
+        //addVisionLines();
     }
 
     private void calculateBraking() {
@@ -124,7 +210,7 @@ public class Car extends GameObject {
     }
 
     private void calculateLongitudinalForce() {
-        boolean isBraking = Keyboard.keydown[66];
+        boolean isBraking = keyBreak;
         if (isBraking) {
             longitudinalForce.set(breakingForce);
         }
@@ -172,7 +258,7 @@ public class Car extends GameObject {
     }
 
     //TODO just for show
-    private void addVisionLines() {
+    /*private void addVisionLines() {
         double angle = Math.atan2(direction.x, direction.y);
         Point start = new Point((int) position.x, (int) position.y);
 
@@ -210,8 +296,9 @@ public class Car extends GameObject {
         setVisionInput(0, direction);
         return new VisionLine(start, rotatedEndPoint, null);
     }
+    */
 
-    private void setVisionInput(double distance, VisionInput.VISION_DIRECTION direction) {
+    /*private void setVisionInput(double distance, VisionInput.VISION_DIRECTION direction) {
         switch (direction) {
             case FRONT: VisionInput.front = distance;
             case FRONT_RIGHT: VisionInput.front_right = distance;
@@ -219,5 +306,5 @@ public class Car extends GameObject {
             case LEFT: VisionInput.left = distance;
             case RIGHT: VisionInput.right = distance;
         }
-    }
+    }*/
 }

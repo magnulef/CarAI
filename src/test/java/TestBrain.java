@@ -143,9 +143,12 @@ public class TestBrain {
             }
 
             FloatBuffer doubleBuffer = new FloatBuffer(weight);
-            indArray.setData(doubleBuffer);
+            INDArray array = indArray.dup();
+            array.setData(doubleBuffer);
+            //INDArray array = Nd4j.create(doubleBuffer);
+            //indArray.setData(doubleBuffer);
             //INDArray alteredWeight = Nd4j.create(weight);
-            alteredWeights.put(key, indArray);
+            alteredWeights.put(key, array);
         }
 
         return alteredWeights;

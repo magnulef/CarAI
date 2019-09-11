@@ -25,11 +25,11 @@ public class Handler {
         }
     }
 
-    public void addGameObject(GameObject gameObject) {
+    public synchronized void addGameObject(GameObject gameObject) {
         this.gameObjects.add(gameObject);
     }
 
-    public void removeGameObject(GameObject gameObject) {
+    public synchronized void removeGameObject(GameObject gameObject) {
         this.gameObjects.remove(gameObject);
     }
 }

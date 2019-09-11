@@ -16,16 +16,15 @@ public class Game extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     private Handler handler;
-    private NNTest nn;
 
     public Game() {
         this.handler = new Handler();
         new Window(WIDTH, HEIGHT, "CarAI", this);
-        this.addKeyListener(new KeyInput(false));
+        this.addKeyListener(new KeyInput());
 
         this.handler.addGameObject(new Track());
         this.handler.addGameObject(new RewardGates(false));
-        this.handler.addGameObject(new Car(handler));
+        this.handler.addGameObject(new Car(handler, null, true));
     }
 
     public synchronized void start() {
@@ -45,7 +44,6 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        this.nn = new NNTest();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -57,7 +55,6 @@ public class Game extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             while (delta >= 1) {
-                nn.calculateAction();
                 tick();
                 delta--;
             }

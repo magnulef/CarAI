@@ -1,9 +1,6 @@
 package game.ai;
 
-import game.valueobjects.Weight;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import game.valueobjects.InputContract;
 import java.util.Map;
 import java.util.Set;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -20,21 +17,28 @@ public class NeuralNetwork {
 
     private final MultiLayerNetwork network;
 
-    public NeuralNetwork() {
-        int inputNum = 8;
-        int outputNum = 5;
-
+    public NeuralNetwork(Map<String, INDArray> initialWeights) {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
             .list()
             .layer(0, new DenseLayer.Builder()
-                .nIn(inputNum)
+                .nIn(8)
                 .nOut(8)
                 .activation(Activation.SOFTMAX)
                 .weightInit(WeightInit.XAVIER)
                 .build())
-            .layer(1, new OutputLayer.Builder()
+            .layer(1, new DenseLayer.Builder()
                 .nIn(8)
-                .nOut(outputNum)
+                .nOut(8)
+                .activation(Activation.ELU)
+                .build())
+            .layer(2, new DenseLayer.Builder()
+                .nIn(8)
+                .nOut(8)
+                .activation(Activation.ELU)
+                .build())
+            .layer(3, new OutputLayer.Builder()
+                .nIn(8)
+                .nOut(7)
                 .activation(Activation.SOFTMAX)
                 .weightInit(WeightInit.XAVIER)
                 .build())
@@ -45,52 +49,64 @@ public class NeuralNetwork {
         network = new MultiLayerNetwork(configuration);
         network.init();
 
-        Map<String, INDArray> paramTable = network.paramTable();
-        Set<String> keys = paramTable.keySet();
-        Iterator<String> it = keys.iterator();
+        if (initialWeights != null) {
+            Map<String, INDArray> paramTable = network.paramTable();
+            Set<String> keys = paramTable.keySet();
 
-        while (it.hasNext()) {
-            String key = it.next();
-            INDArray values = paramTable.get(key);
-            System.out.print(key+" ");//print keys
-            System.out.println(Arrays.toString(values.shape()));//print shape of INDArray
-            System.out.println(values);
-            network.setParam(key, Nd4j.rand(values.shape()));//set some random values
+            for (String key : keys) {
+                network.setParam(key, initialWeights.get(key));
+            }
+
+        } else {
+            Map<String, INDArray> paramTable = network.paramTable();
+            Set<String> keys = paramTable.keySet();
+            for (String key : keys) {
+                INDArray values = paramTable.get(key);
+                network.setParam(key, Nd4j.rand(values.shape()));
+            }
         }
     }
 
-    private MultiLayerConfiguration constructConfiguration(int outputNum, int inputNum) {
-        return new NeuralNetConfiguration.Builder()
-            .list()
-            .layer(0, new DenseLayer.Builder()
-                .nIn(inputNum)
-                .nOut(8)
-                .activation(Activation.SOFTMAX)
-                .weightInit(WeightInit.XAVIER)
-                .build())
-            .layer(1, new OutputLayer.Builder()
-                .nIn(8)
-                .nOut(outputNum)
-                .activation(Activation.SOFTMAX)
-                .weightInit(WeightInit.XAVIER)
-                .build())
-            .pretrain(false)
-            .backprop(false)
-            .build();
+    public Actions getAction(InputContract inputContract) {
+        INDArray input = Nd4j.create(inputContract.getData());
+        INDArray output = network.output(input);
+        int index = findLargestIndex(output.data().asDouble());
+
+        switch (index) {
+            case 0:
+                return Actions.FORWARD;
+            case 1:
+                return Actions.FORWARD_RIGHT;
+            case 2:
+                return Actions.FORWARD_LEFT;
+            case 3:
+                return Actions.RIGHT;
+            case 4:
+                return Actions.LEFT;
+            case 5:
+                return Actions.BREAK;
+            case 6:
+                return Actions.NOTHING;
+            default:
+                return Actions.NOTHING;
+        }
     }
 
-    private void setWeights(List<Weight> weights) {
-        Map<String, INDArray> paramTable = network.paramTable();
-        Set<String> keys = paramTable.keySet();
-        Iterator<String> it = keys.iterator();
+    public Map<String, INDArray> getWeights() {
+        return network.paramTable();
+    }
 
-        while (it.hasNext()) {
-            String key = it.next();
-            INDArray values = paramTable.get(key);
-            System.out.print(key+" ");//print keys
-            System.out.println(Arrays.toString(values.shape()));//print shape of INDArray
-            System.out.println(values);
-            network.setParam(key, Nd4j.rand(values.shape()));//set some random values
+    private int findLargestIndex(double[] array) {
+        double largestValue = -999999;
+        int largestIndex = 0;
+        for(int index = 0; index < array.length; index++) {
+            double value = array[index];
+            if (value > largestValue) {
+                largestValue = value;
+                largestIndex = index;
+            }
         }
+
+        return largestIndex;
     }
 }
