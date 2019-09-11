@@ -1,5 +1,6 @@
-package game.renderables;
+package game.renderables.car;
 
+import game.renderables.GameObject;
 import java.awt.*;
 
 public class VisionLine extends GameObject {

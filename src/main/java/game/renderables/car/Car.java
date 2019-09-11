@@ -1,21 +1,17 @@
-package game.renderables;
+package game.renderables.car;
 
 import game.Handler;
 import game.ai.Actions;
 import game.ai.NeuralNetwork;
+import game.renderables.GameObject;
 import game.valueobjects.InputContract;
-import game.valueobjects.Line;
 import game.valueobjects.VisionContract;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.List;
 import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
 import utils.Vec3;
-import utils.VisionInput;
 import utils.VisionUtils;
 
 public class Car extends GameObject {
@@ -27,6 +23,11 @@ public class Car extends GameObject {
     private static final double TYRE = 0.6; //0.6
     private static final int WIDTH = 20;
     private static final int HEIGHT = 40;
+
+    private final Handler handler;
+    private final NeuralNetwork neuralNetwork;
+    private final boolean keyBoardEnabled;
+    private final CarRenderer carRenderer;
 
     private Vec3 position;
     private Vec3 direction;
@@ -44,11 +45,19 @@ public class Car extends GameObject {
 
     private boolean isDrifting;
 
-    private final Handler handler;
-    private final NeuralNetwork neuralNetwork;
-    private final boolean keyBoardEnabled;
+    private boolean keyDown;
+    private boolean keyUp;
+    private boolean keyRight;
+    private boolean keyLeft;
+    private boolean keyBreak;
 
-    public Car(Handler handler, Map<String, INDArray> previousWeights, boolean keyBoardEnabled) {
+    public Car(
+        Handler handler,
+        Map<String, INDArray> previousWeights,
+        boolean keyBoardEnabled,
+        boolean shouldRender,
+        boolean renderVisionLines
+    ) {
         position = new Vec3(100, 200, 0);
         direction = new Vec3(0, 1, 0);
         velocity = new Vec3();
@@ -62,13 +71,8 @@ public class Car extends GameObject {
         this.handler = handler;
         neuralNetwork = new NeuralNetwork(previousWeights);
         this.keyBoardEnabled = keyBoardEnabled;
+        this.carRenderer = new CarRenderer(shouldRender, renderVisionLines);
     }
-
-    private boolean keyDown;
-    private boolean keyUp;
-    private boolean keyRight;
-    private boolean keyLeft;
-    private boolean keyBreak;
 
     private void setActions() {
         if (keyBoardEnabled) {
@@ -181,8 +185,8 @@ public class Car extends GameObject {
         calculateVelocity(1);
         calculatePosition(1);
 
-        addDrift();
-        //addVisionLines();
+        carRenderer.addDrift(isDrifting, handler, position, WIDTH);
+        carRenderer.addVisionLines(handler, direction, position);
     }
 
     private void calculateBraking() {
@@ -238,73 +242,6 @@ public class Car extends GameObject {
 
     @Override
     public void render(Graphics graphics) {
-        Graphics2D carGraphics = (Graphics2D) graphics.create();
-        renderCar(carGraphics);
+        carRenderer.renderCar(graphics, direction, position, WIDTH, HEIGHT);
     }
-
-    private void renderCar(Graphics2D graphics2D) {
-        double angle = -Math.atan2(direction.x, direction.y);
-
-        graphics2D.rotate(angle, position.x, position.y + 0);
-        graphics2D.setColor(Color.BLACK);
-
-        graphics2D.fillRect((int) (position.x-(WIDTH/2)), (int) (position.y-(HEIGHT/2)), WIDTH, HEIGHT);
-    }
-
-    private void addDrift() {
-        if (isDrifting) {
-            handler.addGameObject(new Drift(handler, (int) position.x, (int) position.y, WIDTH/3, WIDTH/6, WIDTH/6));
-        }
-    }
-
-    //TODO just for show
-    /*private void addVisionLines() {
-        double angle = Math.atan2(direction.x, direction.y);
-        Point start = new Point((int) position.x, (int) position.y);
-
-        FRONT = addVisionLine(angle, 0, start, 200, FRONT, VisionInput.VISION_DIRECTION.FRONT);
-        handler.addGameObject(FRONT);
-        RIGHTFRONT = addVisionLine(angle, 0.55, start, 200, RIGHTFRONT, VisionInput.VISION_DIRECTION.FRONT_RIGHT);
-        handler.addGameObject(RIGHTFRONT);
-        RIGHT = addVisionLine(angle, 1.35, start, 200, RIGHT, VisionInput.VISION_DIRECTION.RIGHT);
-        handler.addGameObject(RIGHT);
-        LEFTFRONT = addVisionLine(angle, -0.55, start, 200, LEFTFRONT, VisionInput.VISION_DIRECTION.FRONT_LEFT);
-        handler.addGameObject(LEFTFRONT);
-        LEFT = addVisionLine(angle, -1.35, start, 200, LEFT, VisionInput.VISION_DIRECTION.LEFT);
-        handler.addGameObject(LEFT);
-    }
-
-    private GameObject FRONT = null;
-    private GameObject RIGHTFRONT = null;
-    private GameObject RIGHT = null;
-    private GameObject LEFTFRONT = null;
-    private GameObject LEFT = null;
-
-    private GameObject addVisionLine(double angle, double angleOffset, Point start, int length, GameObject gameObject, VisionInput.VISION_DIRECTION direction) {
-        if (gameObject != null) {
-            handler.removeGameObject(gameObject);
-        }
-
-        Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
-
-        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
-        if (intersectionPoint != null) {
-            setVisionInput(VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint), direction);
-            return new VisionLine(start, null, intersectionPoint);
-        }
-
-        setVisionInput(0, direction);
-        return new VisionLine(start, rotatedEndPoint, null);
-    }
-    */
-
-    /*private void setVisionInput(double distance, VisionInput.VISION_DIRECTION direction) {
-        switch (direction) {
-            case FRONT: VisionInput.front = distance;
-            case FRONT_RIGHT: VisionInput.front_right = distance;
-            case FRONT_LEFT: VisionInput.front_left = distance;
-            case LEFT: VisionInput.left = distance;
-            case RIGHT: VisionInput.right = distance;
-        }
-    }*/
 }

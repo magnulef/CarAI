@@ -1,7 +1,8 @@
-package game.renderables;
+package game.renderables.car;
 
 import game.Handler;
 
+import game.renderables.GameObject;
 import java.awt.*;
 
 public class Drift extends GameObject {

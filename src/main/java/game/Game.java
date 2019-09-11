@@ -1,7 +1,6 @@
 package game;
 
-import game.renderables.Car;
-import game.renderables.Edge;
+import game.renderables.car.Car;
 import game.renderables.RewardGates;
 import game.renderables.Track;
 
@@ -24,7 +23,7 @@ public class Game extends Canvas implements Runnable {
 
         this.handler.addGameObject(new Track());
         this.handler.addGameObject(new RewardGates(false));
-        this.handler.addGameObject(new Car(handler, null, true));
+        this.handler.addGameObject(new Car(handler, null, true, true, false));
     }
 
     public synchronized void start() {
