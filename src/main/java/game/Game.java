@@ -4,8 +4,11 @@ import game.renderables.car.Car;
 import game.renderables.RewardGates;
 import game.renderables.Track;
 
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Arrays;
 
 public class Game extends Canvas implements Runnable {
 
@@ -18,7 +21,8 @@ public class Game extends Canvas implements Runnable {
 
     public Game() {
         this.handler = new Handler();
-        new Window(WIDTH, HEIGHT, "CarAI", this);
+        new Window(WIDTH, HEIGHT, "CarAI", Arrays.asList(this));
+        this.start();
         this.addKeyListener(new KeyInput());
 
         this.handler.addGameObject(new Track());
@@ -99,9 +103,5 @@ public class Game extends Canvas implements Runnable {
 
         graphics.dispose();
         bufferStrategy.show();
-    }
-
-    public static void main(String[] args) {
-        new Game();
     }
 }
