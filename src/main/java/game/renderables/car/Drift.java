@@ -26,17 +26,7 @@ public class Drift extends GameObject {
     }
 
     @Override
-    public void tick() {
-        /*if (alpha > life) {
-            alpha -= (life - 0.0001);
-        } else {
-            handler.removeGameObject(this);
-        }*/
-    }
-
-    @Override
     public void render(Graphics graphics) {
-        //TEST
         if (alpha > life) {
             alpha -= (life - 0.000001);
         } else {

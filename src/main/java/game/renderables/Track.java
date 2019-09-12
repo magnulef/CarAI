@@ -32,11 +32,6 @@ public class Track extends GameObject {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public void render(Graphics graphics) {
         if (LINES.isEmpty()) {
             return;

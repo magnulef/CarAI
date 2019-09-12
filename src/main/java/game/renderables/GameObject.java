@@ -1,9 +1,8 @@
 package game.renderables;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 public abstract class GameObject {
 
-    public abstract void tick();
     public abstract void render(Graphics graphics);
 }

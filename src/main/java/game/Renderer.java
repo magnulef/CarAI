@@ -15,11 +15,10 @@ public class Renderer extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     private final Handler handler;
-    private final Window1 window;
 
     public Renderer() {
         this.handler = new Handler();
-        this.window = new Window1(WIDTH, HEIGHT, "CarAI", this);
+        new Window(WIDTH, HEIGHT, "CarAI", this);
         this.start();
         this.addKeyListener(new KeyInput());
         this.handler.addGameObject(new Track());
@@ -57,7 +56,6 @@ public class Renderer extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             while (delta >= 1) {
-                //tick();
                 delta--;
             }
             if (running) {

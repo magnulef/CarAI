@@ -1,7 +1,9 @@
 package game.renderables.car;
 
 import game.renderables.GameObject;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 
 public class VisionLine extends GameObject {
 
@@ -13,11 +15,6 @@ public class VisionLine extends GameObject {
         this.start = start;
         this.end = end;
         this.interception = interception;
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override

@@ -9,10 +9,8 @@ public class Simulation implements Runnable {
     private Thread thread;
     private boolean running = false;
     private final Car car;
-    //private final Handler handler;
 
     public Simulation(Handler handler, Map<String, INDArray> previousWeights) {
-        //this.handler = handler;
         this.car = new Car(
             handler,
             previousWeights,

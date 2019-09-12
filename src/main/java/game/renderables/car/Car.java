@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.List;
 import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
@@ -115,7 +114,6 @@ public class Car extends GameObject {
         return false;
     }
 
-    @Override
     public void tick() {
         if (isDeathEnabled && (isDead || shouldDie())) {
             isDead = true;

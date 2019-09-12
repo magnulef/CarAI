@@ -59,11 +59,6 @@ public class RewardGates extends GameObject {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public void render(Graphics graphics) {
         if (!shouldRender || LINES.isEmpty()) {
             return;
