@@ -4,6 +4,7 @@ import game.Handler;
 import game.ai.Actions;
 import game.ai.NeuralNetwork;
 import game.renderables.GameObject;
+import game.renderables.RewardGates;
 import game.renderables.Track;
 import game.valueobjects.InputContract;
 import game.valueobjects.Line;
@@ -12,7 +13,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
 import utils.Vec3;
@@ -58,6 +61,9 @@ public class Car extends GameObject {
     private boolean isDead;
     private final boolean isDeathEnabled;
 
+    private double fitness;
+    private Set<Integer> passedGates;
+
     public Car(
         Handler handler,
         Map<String, INDArray> previousWeights,
@@ -82,6 +88,7 @@ public class Car extends GameObject {
         this.carRenderer = new CarRenderer(shouldRender, renderVisionLines);
         this.isDead = false;
         this.isDeathEnabled = isDeathEnabled;
+        this.passedGates = new HashSet<>();
     }
 
     private boolean shouldDie() {
@@ -114,6 +121,39 @@ public class Car extends GameObject {
         return false;
     }
 
+    public double getFitness() {
+        return fitness;
+    }
+
+    private void updateFitness() {
+        Rectangle car = new Rectangle(
+            (int)(position.x - WIDTH/2),
+            (int) (position.y - HEIGHT/2),
+            WIDTH,
+            HEIGHT
+        );
+
+        if (passedGates.size() == RewardGates.getLines().size()) {
+            passedGates.clear();
+        }
+
+        for (Line line : RewardGates.getLines()) {
+            boolean intersection = car.intersectsLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+            if (intersection && (isFirstRewardGate(line) || validPass(line))) {
+                fitness = fitness + 100;
+                passedGates.add(line.getNumber());
+            }
+        }
+    }
+
+    private boolean validPass(Line line) {
+        return !passedGates.contains(line.getNumber()) && line.getNumber() != 0;
+    }
+
+    private boolean isFirstRewardGate(Line line) {
+        return passedGates.isEmpty() && line.getNumber() == 0;
+    }
+
     public void tick() {
         if (isDeathEnabled && (isDead || shouldDie())) {
             isDead = true;
@@ -121,6 +161,7 @@ public class Car extends GameObject {
             return;
         }
 
+        updateFitness();
         setActions();
         double diff = TYRE * (velocity.getSize() / 30.0);
 
