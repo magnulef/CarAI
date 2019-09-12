@@ -25,7 +25,6 @@ public class Renderer extends Canvas implements Runnable {
         this.handler.addGameObject(new RewardGates(false));
         Simulation simulation = new Simulation(handler, null);
         simulation.start();
-
     }
 
     public synchronized void start() {
