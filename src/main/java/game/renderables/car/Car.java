@@ -88,6 +88,10 @@ public class Car extends GameObject {
         this.isDeathEnabled = isDeathEnabled;
     }
 
+    public Map<String, INDArray> getWeights() {
+        return this.neuralNetwork.getWeights();
+    }
+
     public boolean isDead() {
         return isDead;
     }
@@ -144,11 +148,6 @@ public class Car extends GameObject {
             if (intersection && line.getNumber() == previousGate + 1) {
                 fitness = fitness + 100;
                 previousGate = line.getNumber();
-                System.out.println("Fitness: " + fitness);
-            }
-
-            if (intersection && line.getNumber() != previousGate + 1) {
-                System.out.println("Passed a bad line: " + line.getNumber());
             }
         }
     }

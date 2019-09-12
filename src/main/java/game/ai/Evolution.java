@@ -12,32 +12,47 @@ public class Evolution {
 
     private double topScore;
     private List<Simulation> currentGeneration;
+    private boolean evolutionStarted;
+    private final boolean singlePlayer;
 
-    public Evolution() {
+    public Evolution(boolean singlePlayer) {
         this.handler = new Handler();
         this.topScore = 0;
         this.currentGeneration = new ArrayList<>();
         new Renderer(handler);
+        this.evolutionStarted = false;
+        this.singlePlayer = singlePlayer;
     }
 
     public void run() {
-        boolean isGenerationDone = false;
-        boolean evolutionInProgress = false;
-        while (true) {
-            if (!evolutionInProgress) {
-                if (topScore > 1000) {
-                    System.out.println("OVER 1000");
-                    break;
-                }
-
-                if (currentGeneration.isEmpty()) {
-                    currentGeneration = initial(1);
-                }
-
-                startGeneration();
-                evolutionInProgress = true;
-            }
+        boolean isRunningSinglePlayerMode = singlePlayerMode();
+        if (isRunningSinglePlayerMode) {
+            return;
         }
+
+        if (!this.evolutionStarted) {
+            this.evolutionStarted = true;
+        }
+
+        while (this.evolutionStarted) {
+            preformEvolution();
+        }
+    }
+
+    private boolean singlePlayerMode() {
+        if (!singlePlayer) {
+            return false;
+        }
+
+        currentGeneration.add(new Simulation(handler, true));
+        startGeneration();
+        return true;
+    }
+
+    private boolean preformEvolution() {
+        this.evolutionStarted = false;
+
+        return false;
     }
 
     private List<Simulation> initial(int size) {

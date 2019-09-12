@@ -23,6 +23,27 @@ public class Simulation implements Runnable {
         handler.addGameObject(car);
     }
 
+    public Simulation(Handler handler, boolean keyBoardEnabled) {
+        this.car = new Car(
+            handler,
+            null,
+            keyBoardEnabled,
+            true,
+            false,
+            false
+        );
+
+        handler.addGameObject(car);
+    }
+
+    public synchronized double getFitness() {
+        return this.car.getFitness();
+    }
+
+    public synchronized Map<String, INDArray> getWeights() {
+        return this.car.getWeights();
+    }
+
     public synchronized void start() {
         thread = new Thread(this);
         thread.start();

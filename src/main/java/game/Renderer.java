@@ -22,7 +22,7 @@ public class Renderer extends Canvas implements Runnable {
         this.start();
         this.addKeyListener(new KeyInput());
         this.handler.addGameObject(new Track());
-        this.handler.addGameObject(new RewardGates(true));
+        this.handler.addGameObject(new RewardGates(false));
     }
 
     public synchronized void start() {
