@@ -2,7 +2,6 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
-import java.util.List;
 import javax.swing.JFrame;
 
 public class Window extends Canvas {
@@ -20,9 +19,5 @@ public class Window extends Canvas {
         this.frame.setLocationRelativeTo(null);
         this.frame.add(renderer);
         this.frame.setVisible(true);
-    }
-
-    public void add(Canvas canvas) {
-        this.frame.add(canvas);
     }
 }

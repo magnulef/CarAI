@@ -28,17 +28,17 @@ public class NeuralNetwork {
                 .build())
             .layer(1, new DenseLayer.Builder()
                 .nIn(8)
-                .nOut(8)
+                .nOut(6)
                 .activation(Activation.ELU)
                 .build())
             .layer(2, new DenseLayer.Builder()
-                .nIn(8)
+                .nIn(6)
                 .nOut(8)
                 .activation(Activation.ELU)
                 .build())
             .layer(3, new OutputLayer.Builder()
                 .nIn(8)
-                .nOut(7)
+                .nOut(6)
                 .activation(Activation.SOFTMAX)
                 .weightInit(WeightInit.XAVIER)
                 .build())
@@ -85,10 +85,12 @@ public class NeuralNetwork {
                 return Actions.LEFT;
             case 5:
                 return Actions.BREAK;
-            case 6:
+            default:
+                return Actions.FORWARD;
+            /*case 6:
                 return Actions.NOTHING;
             default:
-                return Actions.NOTHING;
+                return Actions.NOTHING;*/
         }
     }
 

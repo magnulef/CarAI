@@ -9,7 +9,7 @@ public class Handler {
 
     private final LinkedList<GameObject> gameObjects = new LinkedList<>();
 
-    public void render(Graphics graphics) {
+    public synchronized void render(Graphics graphics) {
         for(int i = 0; i < gameObjects.size(); i++) {
             GameObject tempObject = gameObjects.get(i);
 

@@ -37,6 +37,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>lib</groupId>
             <artifactId>json-lib</artifactId>
         </dependency>
@@ -64,10 +69,6 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>8</release> <!-- DL4J requires 8 -->
-                    <!--<source>11.0.4</source>
-                    <target>11.0.4</target>-->
-                    <!--<source>${java.version}</source>
-                    <target>${java.version}</target>-->
                 </configuration>
             </plugin>
 
@@ -76,14 +77,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <releaseProfiles>ps-releases</releaseProfiles>
-                </configuration>
-            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

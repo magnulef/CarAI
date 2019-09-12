@@ -9,15 +9,16 @@ public class Simulation implements Runnable {
     private Thread thread;
     private boolean running = false;
     private final Car car;
+    private long startTime;
 
     public Simulation(Handler handler, Map<String, INDArray> previousWeights) {
         this.car = new Car(
             handler,
             previousWeights,
-            true,
-            true,
             false,
-            false
+            false,
+            false,
+            true
         );
 
         handler.addGameObject(car);
@@ -45,18 +46,29 @@ public class Simulation implements Runnable {
     }
 
     public synchronized void start() {
+        if (running) {
+            return;
+        }
+
         thread = new Thread(this);
         thread.start();
         running = true;
+        startTime = System.currentTimeMillis();
     }
 
     public synchronized void stop() {
         try {
-            thread.join();
+            thread.interrupt();
+            //thread.stop();
+            //thread.join();
             running = false;
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public synchronized boolean isRunning() {
+        return running;
     }
 
     public synchronized boolean isDeadOrDone() {
@@ -64,8 +76,16 @@ public class Simulation implements Runnable {
             return false;
         }
 
-        //expand with timer
-        return car.isDead();
+        if (car.isDead()) {
+            return true;
+        }
+
+        //30000 = 30sec
+        if (startTime + 5000 < System.currentTimeMillis()) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

@@ -60,7 +60,7 @@ public class Car extends GameObject {
     private final boolean isDeathEnabled;
 
     private double fitness;
-    private int previousGate;
+    private int previousGate = -1;
 
     public Car(
         Handler handler,
@@ -72,7 +72,7 @@ public class Car extends GameObject {
     ) {
         this.position = new Vec3(100, 200, 0);
         this.direction = new Vec3(0, 1, 0);
-        this.velocity = new Vec3();
+        this.velocity = new Vec3(1, 1, 1);
         this.acceleration = new Vec3();
         this.breakingForce = new Vec3();
         this.engineForce = 0;
@@ -93,11 +93,16 @@ public class Car extends GameObject {
     }
 
     public boolean isDead() {
+        //System.out.println("Is dead");
         return isDead;
     }
 
+    private boolean outOfBounds() {
+        return position.x < 0 || position.y < 0 || position.x > 1000 || position.y > 1000;
+    }
+
     private boolean shouldDie() {
-        if (overlappingEdge() || intersectLine()) {
+        if (overlappingEdge() || intersectLine() || outOfBounds()) {
             return true;
         }
 
@@ -145,19 +150,40 @@ public class Car extends GameObject {
         for (Line line : RewardGates.getLines()) {
             boolean intersection = car.intersectsLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
 
+            /*if (intersection) {
+                System.out.println("check");
+            }*/
+
             if (intersection && line.getNumber() == previousGate + 1) {
                 fitness = fitness + 100;
                 previousGate = line.getNumber();
             }
         }
+
+        //fitness = fitness + (position.x - 100) + (position.y - 200);
     }
 
+    private long updateTime = System.currentTimeMillis();
+
     public void tick() {
+        //System.out.println(position.x + " : " + position.y);
+        /*if (shouldDie()) {
+            position = new Vec3(100, 100, 0);
+        }*/
+
         if (isDeathEnabled && (isDead || shouldDie())) {
             isDead = true;
             engineForce = 0;
+
             return;
         }
+
+        /*long currentTime = System.currentTimeMillis();
+        if (updateTime + 100 > currentTime) {
+            return;
+        }
+
+        updateTime = currentTime;*/
 
         updateFitness();
         setActions();
@@ -251,9 +277,15 @@ public class Car extends GameObject {
     }
 
     private void calculatePosition(double deltaTime) {
+        if (Double.isNaN(velocity.getSize())) {
+            return;
+        }
+
         velocity.scale(deltaTime);
         position.add(velocity);
     }
+
+    //private long previousAction = System.currentTimeMillis();
 
     private void setActions() {
         if (keyBoardEnabled) {
@@ -264,6 +296,13 @@ public class Car extends GameObject {
             keyBreak = Keyboard.keydown[66];
             return;
         }
+
+        /*long currentTime = System.currentTimeMillis();
+        if (previousAction + 100 > currentTime) {
+            return;
+        }
+
+        previousAction = currentTime;*/
 
         keyDown = false;
         keyUp = false;
@@ -290,6 +329,8 @@ public class Car extends GameObject {
                 keyBreak = true;
             case NOTHING:
         }
+
+        //System.out.println(action);
     }
 
     private InputContract getInputs() {

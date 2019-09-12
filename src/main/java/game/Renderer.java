@@ -21,8 +21,8 @@ public class Renderer extends Canvas implements Runnable {
         new Window(WIDTH, HEIGHT, "CarAI", this);
         this.start();
         this.addKeyListener(new KeyInput());
-        this.handler.addGameObject(new Track());
-        this.handler.addGameObject(new RewardGates(false));
+        /*this.handler.addGameObject(new Track());
+        this.handler.addGameObject(new RewardGates(false));*/
     }
 
     public synchronized void start() {
@@ -62,7 +62,7 @@ public class Renderer extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: " + frames);
+                //System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }

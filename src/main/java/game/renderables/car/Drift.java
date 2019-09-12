@@ -25,10 +25,22 @@ public class Drift extends GameObject {
         this.height = height;
     }
 
+    private int timeToLive = 5000;
+
+    private void reduce() {
+        if (alpha < 0.0008f) {
+            alpha = 0;
+            return;
+        }
+
+        alpha = alpha - 0.0005f;
+    }
+
     @Override
     public void render(Graphics graphics) {
-        if (alpha > life) {
-            alpha -= (life - 0.000001);
+        if (timeToLive > 0 && alpha != 0) {
+            timeToLive = timeToLive - 1;
+            reduce();
         } else {
             handler.removeGameObject(this);
             return;
