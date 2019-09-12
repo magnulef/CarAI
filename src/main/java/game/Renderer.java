@@ -16,15 +16,13 @@ public class Renderer extends Canvas implements Runnable {
     private boolean running = false;
     private final Handler handler;
 
-    public Renderer() {
-        this.handler = new Handler();
+    public Renderer(Handler handler) {
+        this.handler = handler;
         new Window(WIDTH, HEIGHT, "CarAI", this);
         this.start();
         this.addKeyListener(new KeyInput());
         this.handler.addGameObject(new Track());
-        this.handler.addGameObject(new RewardGates(false));
-        Simulation simulation = new Simulation(handler, null);
-        simulation.start();
+        this.handler.addGameObject(new RewardGates(true));
     }
 
     public synchronized void start() {

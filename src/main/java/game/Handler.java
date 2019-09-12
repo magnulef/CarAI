@@ -24,4 +24,8 @@ public class Handler {
     public synchronized void removeGameObject(GameObject gameObject) {
         this.gameObjects.remove(gameObject);
     }
+
+    public synchronized void clear() {
+        this.gameObjects.clear();
+    }
 }

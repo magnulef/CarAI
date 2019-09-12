@@ -13,9 +13,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
 import utils.Vec3;
@@ -62,7 +60,7 @@ public class Car extends GameObject {
     private final boolean isDeathEnabled;
 
     private double fitness;
-    private Set<Integer> passedGates;
+    private int previousGate;
 
     public Car(
         Handler handler,
@@ -88,7 +86,10 @@ public class Car extends GameObject {
         this.carRenderer = new CarRenderer(shouldRender, renderVisionLines);
         this.isDead = false;
         this.isDeathEnabled = isDeathEnabled;
-        this.passedGates = new HashSet<>();
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     private boolean shouldDie() {
@@ -133,25 +134,23 @@ public class Car extends GameObject {
             HEIGHT
         );
 
-        if (passedGates.size() == RewardGates.getLines().size()) {
-            passedGates.clear();
+        if (previousGate == 30) {
+            previousGate = -1;
         }
 
         for (Line line : RewardGates.getLines()) {
             boolean intersection = car.intersectsLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
-            if (intersection && (isFirstRewardGate(line) || validPass(line))) {
+
+            if (intersection && line.getNumber() == previousGate + 1) {
                 fitness = fitness + 100;
-                passedGates.add(line.getNumber());
+                previousGate = line.getNumber();
+                System.out.println("Fitness: " + fitness);
+            }
+
+            if (intersection && line.getNumber() != previousGate + 1) {
+                System.out.println("Passed a bad line: " + line.getNumber());
             }
         }
-    }
-
-    private boolean validPass(Line line) {
-        return !passedGates.contains(line.getNumber()) && line.getNumber() != 0;
-    }
-
-    private boolean isFirstRewardGate(Line line) {
-        return passedGates.isEmpty() && line.getNumber() == 0;
     }
 
     public void tick() {

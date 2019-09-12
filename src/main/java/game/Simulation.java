@@ -38,6 +38,15 @@ public class Simulation implements Runnable {
         }
     }
 
+    public synchronized boolean isDeadOrDone() {
+        if (!running) {
+            return false;
+        }
+
+        //expand with timer
+        return car.isDead();
+    }
+
     @Override
     public void run() {
         long lastTime = System.nanoTime();
