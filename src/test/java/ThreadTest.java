@@ -14,6 +14,7 @@ public class ThreadTest {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
         Handler handler = new Handler();
         Simulation simulation = new Simulation(
+            1,
             Arrays.asList(
                 new Car(handler, null, false, false, false, true)
             ), handler);

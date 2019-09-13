@@ -20,9 +20,11 @@ public class Evolution {
     private List<Simulation> currentGeneration;
     private boolean evolutionStarted;
     private final boolean singlePlayer;
+    private final ThreadPoolExecutor executor;
 
     public Evolution(boolean singlePlayer) {
         this.handler = new Handler();
+        this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         this.topScore = 0;
         this.currentGeneration = new ArrayList<>();
         new Renderer(handler);
@@ -52,7 +54,7 @@ public class Evolution {
         }
 
         //currentGeneration.add(new Simulation(handler, true));
-        currentGeneration.add(new Simulation(handler, null));
+        currentGeneration.add(new Simulation(0, handler, null));
         startGeneration();
         return true;
     }
@@ -64,10 +66,10 @@ public class Evolution {
 
         startGeneration();
         runGeneration();
-        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.15, currentGeneration); //returns 5 to many
+        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.15, currentGeneration);
         Car best = GenerationUtils.getBestPerformer(currentGeneration);
         System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
-        handlePreviousThreads(currentGeneration);
+        //handlePreviousThreads(currentGeneration);
         clearHandler();
         currentGeneration.clear();
         currentGeneration = newGeneration;
@@ -92,16 +94,16 @@ public class Evolution {
 
             }
             if (generationCheck()) {
+                System.out.println("Generation is done!");
                 done = true;
             }
-
-            //generationStatus();
+            generationStatus();
         }
     }
 
     private boolean generationCheck() {
-        for (Simulation simulation : currentGeneration) {
-            if (!simulation.isDeadOrDone()) {
+        for (Simulation simulation : currentGeneration) { //NOT WORKING WITH EXECUTOR
+            if (!simulation.isRunning()) {
                 return false;
             }
         }
@@ -112,7 +114,8 @@ public class Evolution {
     private void generationStatus() {
         System.out.println("NEW CHECK");
         for (Simulation simulation : currentGeneration) {
-            System.out.println("Simulation: death: " + simulation.isDeadOrDone() + " running: " + simulation.isRunning());
+            System.out.println("Simulation [" + simulation.getNumber() + "] is running: " + simulation.isRunning());
+            //System.out.println("Simulation: death: " + simulation.isDeadOrDone() + " running: " + simulation.isRunning());
         }
     }
 
@@ -123,21 +126,19 @@ public class Evolution {
             for (int j = 0; j < generationGroupSize; j++) {
                 cars.add(new Car(handler, null, false, true, false, true));
             }
-            simulations.add(new Simulation(cars, handler));
+            simulations.add(new Simulation(i ,cars, handler));
         }
 
         return simulations;
     }
 
     private void startGeneration() {
-        //ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-        //threadPool.
         if (currentGeneration.isEmpty()) {
             return;
         }
 
-
-
-        currentGeneration.forEach(Simulation::start);
+        for (Simulation simulation : currentGeneration) {
+            executor.execute(simulation);
+        }
     }
 }

@@ -63,6 +63,7 @@ public class GenerationUtils {
             List<Car> grouped = newCars.subList(i * groupSize, i * groupSize + groupSize);
             newSimulations.add(
                 new Simulation(
+                    i,
                     grouped,
                     handler
                 )
