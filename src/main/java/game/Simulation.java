@@ -1,31 +1,34 @@
 package game;
 
 import game.renderables.car.Car;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class Simulation implements Runnable {
 
-    private Thread thread;
+    //private Thread thread;
     private boolean running = false;
-    private final Car car;
+    private final List<Car> cars;
     private long startTime;
 
-    public Simulation(Handler handler, Map<String, INDArray> previousWeights) {
-        this.car = new Car(
-            handler,
-            previousWeights,
-            false,
-            false,
-            false,
-            true
-        );
+    public Simulation(Handler handler, List<Map<String, INDArray>> weights) {
+        this.cars = new ArrayList<>();
+        for (Map<String, INDArray> weight : weights) {
+            Car car = new Car(handler, weight, false, true, false, true);
+            this.cars.add(car);
+            handler.addGameObject(car);
+        }
+    }
 
-        handler.addGameObject(car);
+    public Simulation(List<Car> cars, Handler handler) {
+        this.cars = cars;
+        cars.forEach(car -> handler.addGameObject(car));
     }
 
     public Simulation(Handler handler, boolean keyBoardEnabled) {
-        this.car = new Car(
+        Car car = new Car(
             handler,
             null,
             keyBoardEnabled,
@@ -34,15 +37,27 @@ public class Simulation implements Runnable {
             false
         );
 
+        this.cars = new ArrayList<>();
+        this.cars.add(car);
         handler.addGameObject(car);
     }
 
-    public synchronized double getFitness() {
-        return this.car.getFitness();
+    public synchronized List<Car> getCars() {
+        return this.cars;
     }
 
-    public synchronized Map<String, INDArray> getWeights() {
-        return this.car.getWeights();
+    public synchronized Car getFittestCar() {
+        double bestFitness = -1;
+        Car bestCandidate = null;
+        for (Car car : cars) {
+            double fitness = car.getFitness();
+            if (fitness > bestFitness) {
+                bestFitness = fitness;
+                bestCandidate = car;
+            }
+        }
+
+        return bestCandidate;
     }
 
     public synchronized void start() {
@@ -50,17 +65,12 @@ public class Simulation implements Runnable {
             return;
         }
 
-        thread = new Thread(this);
-        thread.start();
         running = true;
         startTime = System.currentTimeMillis();
     }
 
     public synchronized void stop() {
         try {
-            thread.interrupt();
-            //thread.stop();
-            //thread.join();
             running = false;
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -71,12 +81,8 @@ public class Simulation implements Runnable {
         return running;
     }
 
-    public synchronized boolean isDeadOrDone() {
+    public boolean isDeadOrDone() {
         if (!running) {
-            return false;
-        }
-
-        if (car.isDead()) {
             return true;
         }
 
@@ -85,11 +91,18 @@ public class Simulation implements Runnable {
             return true;
         }
 
+        for (Car car : cars) {
+            if (!car.isDead()) {
+                return false;
+            }
+        }
+
         return false;
     }
 
     @Override
     public void run() {
+        start();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -102,11 +115,15 @@ public class Simulation implements Runnable {
                 tick();
                 delta--;
             }
+
+            if (isDeadOrDone()) {
+                break;
+            }
         }
         stop();
     }
 
     private void tick() {
-        car.tick();
+        cars.forEach(Car::tick);
     }
 }

@@ -1,6 +1,7 @@
 package game.ai;
 
 import game.valueobjects.InputContract;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -96,6 +97,16 @@ public class NeuralNetwork {
 
     public Map<String, INDArray> getWeights() {
         return network.paramTable();
+    }
+
+    public Map<String, INDArray> getClone() {
+        Map<String, INDArray> clone = new HashMap<>();
+        Map<String, INDArray> paramTable = network.paramTable();
+        for (String key : paramTable.keySet()) {
+            clone.put(key, paramTable.get(key).dup());
+        }
+
+        return clone;
     }
 
     private int findLargestIndex(double[] array) {

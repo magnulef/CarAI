@@ -61,6 +61,8 @@ public class Car extends GameObject {
 
     private double fitness;
     private int previousGate = -1;
+    private final boolean shouldRender;
+    private final boolean renderVisionLines;
 
     public Car(
         Handler handler,
@@ -84,12 +86,25 @@ public class Car extends GameObject {
         this.neuralNetwork = new NeuralNetwork(previousWeights);
         this.keyBoardEnabled = keyBoardEnabled;
         this.carRenderer = new CarRenderer(shouldRender, renderVisionLines);
+        this.shouldRender = shouldRender;
+        this.renderVisionLines = renderVisionLines;
         this.isDead = false;
         this.isDeathEnabled = isDeathEnabled;
     }
 
-    public Map<String, INDArray> getWeights() {
-        return this.neuralNetwork.getWeights();
+    public Car clone(Handler handler) {
+        return new Car(
+            handler,
+            this.neuralNetwork.getClone(),
+            this.keyBoardEnabled,
+            this.shouldRender,
+            this.renderVisionLines,
+            this.isDeathEnabled
+        );
+    }
+
+    public Map<String, INDArray> getWeight() {
+        return neuralNetwork.getClone();
     }
 
     public boolean isDead() {

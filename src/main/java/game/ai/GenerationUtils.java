@@ -2,6 +2,7 @@ package game.ai;
 
 import game.Handler;
 import game.Simulation;
+import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,7 +15,77 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class GenerationUtils {
 
-    public static List<Simulation> evolveGeneration(Handler handler, double evolutionChance, List<Simulation> simulations) {
+    public static List<Simulation> evolveGeneration(Handler handler, double mutationChance, List<Simulation> simulations) {
+        List<Car> cars = new ArrayList<>();
+        for (Simulation simulation : simulations) {
+            cars.addAll(simulation.getCars());
+        }
+
+        sort(cars);
+        List<Car> newCars = new ArrayList<>();
+        int top = cars.size() / 10;
+        for (int i = 0; i < top; i = i++) {
+            newCars.add(cars.get(0).clone(handler));
+        }
+
+        for (int i = top; i <= top * 4; i = i + 2) {
+            newCars.add(
+                new Car(
+                    handler,
+                    reproduce(
+                        cars.get(i).getWeight(),
+                        cars.get(i + 1).getWeight()
+                    ),
+                    false,
+                    true,
+                    false,
+                    true
+                )
+            );
+        }
+
+        int index = top * 4 + 1;
+        while(cars.size() > newCars.size()) {
+            if (cars.size() <= index) {
+                mutateRandom(handler, mutationChance, cars.size(), newCars);
+                continue;
+            }
+
+            Car car = cars.get(index);
+            Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
+            newCars.add(new Car(handler, evolvedWeights, false, true, false, true));
+        }
+
+        List<Simulation> newSimulations = new ArrayList<>();
+        for (int i = 0; i < simulations.size(); i++) {
+            int groupSize = newCars.size() / simulations.size();
+
+            List<Car> grouped = newCars.subList(i * groupSize, i * groupSize + groupSize);
+            newSimulations.add(
+                new Simulation(
+                    grouped,
+                    handler
+                )
+            );
+        }
+
+        return newSimulations;
+    }
+
+    private static void mutateRandom(Handler handler, double mutationChance, int maxSize, List<Car> cars) {
+        if (cars.size() >= maxSize) {
+            return;
+        }
+
+        while (cars.size() < maxSize) {
+            int randomTarget = (int) (Math.random() * cars.size());
+            Car randomCar = cars.get(randomTarget);
+            Map<String, INDArray> evolvedWeights = evolve(mutationChance, randomCar.getWeight());
+            cars.add(new Car(handler, evolvedWeights, false, true, false, true));
+        }
+    }
+
+    /*public static List<Simulation> evolveGeneration(Handler handler, double evolutionChance, List<Simulation> simulations) {
         sort(simulations);
         List<Simulation> newGeneration = new ArrayList<>();
 
@@ -47,12 +118,12 @@ public class GenerationUtils {
         }
 
         return newGeneration;
-    }
+    }*/
 
-    private static void sort(List<Simulation> simulations) {
-        Collections.sort(simulations, new Comparator<Simulation>(){
+    private static void sort(List<Car> cars) {
+        Collections.sort(cars, new Comparator<Car>(){
             @Override
-            public int compare(Simulation nr1, Simulation nr2){
+            public int compare(Car nr1, Car nr2){
                 if (nr1.getFitness() < nr2.getFitness()) return -1;
                 if (nr1.getFitness() > nr2.getFitness()) return 1;
                 return 0;
@@ -74,18 +145,18 @@ public class GenerationUtils {
         return true;
     }
 
-    public static Simulation getBestPerformer(List<Simulation> simulations) {
+    public static Car getBestPerformer(List<Simulation> simulations) {
         if (!isDone(simulations)) {
             return null;
         }
 
         double bestFitness = -1;
-        Simulation bestCandidate = null;
+        Car bestCandidate = null;
         for (Simulation simulation : simulations) {
-            double fitness = simulation.getFitness();
-            if (fitness > bestFitness) {
-                bestFitness = fitness;
-                bestCandidate = simulation;
+            Car car = simulation.getFittestCar();
+            if (car.getFitness() > bestFitness) {
+                bestFitness = car.getFitness();
+                bestCandidate = car;
             }
         }
 

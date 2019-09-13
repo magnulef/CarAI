@@ -4,6 +4,7 @@ import game.renderables.GameObject;
 
 import java.awt.Graphics;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Handler {
 
@@ -19,6 +20,10 @@ public class Handler {
 
     public synchronized void addGameObject(GameObject gameObject) {
         this.gameObjects.add(gameObject);
+    }
+
+    public synchronized void addGameObjects(List<GameObject> gameObjects) {
+        this.gameObjects.addAll(gameObjects);
     }
 
     public synchronized void removeGameObject(GameObject gameObject) {
