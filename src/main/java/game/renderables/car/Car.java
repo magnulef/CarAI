@@ -60,6 +60,7 @@ public class Car extends GameObject {
     private final boolean isDeathEnabled;
 
     private double fitness;
+    private boolean oneTimeUpdate = false;
     private int previousGate = -1;
     private final boolean shouldRender;
     private final boolean renderVisionLines;
@@ -147,7 +148,12 @@ public class Car extends GameObject {
     }
 
     public double getFitness() {
+        if (!oneTimeUpdate) {
+            this.fitness = fitness + (position.y - 200);
+            oneTimeUpdate = true;
+        }
         return fitness;
+        //return fitness;
     }
 
     private void updateFitness() {

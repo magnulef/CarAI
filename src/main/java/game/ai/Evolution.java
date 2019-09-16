@@ -1,5 +1,6 @@
 package game.ai;
 
+import game.GenerationStatus;
 import game.Handler;
 import game.Renderer;
 import game.Simulation;
@@ -61,7 +62,7 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(10, 10);
+            currentGeneration = initial(5, 5);
         }
 
         startGeneration();
@@ -73,6 +74,7 @@ public class Evolution {
         clearHandler();
         currentGeneration.clear();
         currentGeneration = newGeneration;
+        GenerationStatus.restart();
         return false;
     }
 
@@ -102,10 +104,8 @@ public class Evolution {
     }
 
     private boolean generationCheck() {
-        for (Simulation simulation : currentGeneration) { //NOT WORKING WITH EXECUTOR
-            if (!simulation.isRunning()) {
-                return false;
-            }
+        if (!GenerationStatus.allDone()) {
+            return false;
         }
 
         return true;
@@ -136,6 +136,8 @@ public class Evolution {
         if (currentGeneration.isEmpty()) {
             return;
         }
+
+        GenerationStatus.setThreadCount(currentGeneration.size());
 
         for (Simulation simulation : currentGeneration) {
             executor.execute(simulation);

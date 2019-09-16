@@ -1,5 +1,6 @@
 package game.ai;
 
+import game.GenerationStatus;
 import game.Handler;
 import game.Simulation;
 import game.renderables.car.Car;
@@ -20,13 +21,17 @@ public class GenerationUtils {
         for (Simulation simulation : simulations) {
             cars.addAll(simulation.getCars());
         }
+        System.out.println("Got all cars: " + cars.size());
 
         sort(cars);
+        System.out.println("Sorted");
         List<Car> newCars = new ArrayList<>();
         int top = cars.size() / 10;
-        for (int i = 0; i < top; i = i++) {
-            newCars.add(cars.get(0).clone(handler));
+        for (int i = 0; i < top; i++) {
+            newCars.add(cars.get(i).clone(handler));
         }
+
+        System.out.println("Added best cars: " + newCars.size());
 
         for (int i = top; i <= top * 4; i = i + 2) {
             newCars.add(
@@ -44,6 +49,8 @@ public class GenerationUtils {
             );
         }
 
+        System.out.println("Reproduced cars: " + newCars.size());
+
         int index = top * 4 + 1;
         while(cars.size() > newCars.size()) {
             if (cars.size() <= index) {
@@ -55,6 +62,8 @@ public class GenerationUtils {
             Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
             newCars.add(new Car(handler, evolvedWeights, false, true, false, true));
         }
+
+        System.out.println("Mutated cars: " + newCars.size());
 
         List<Simulation> newSimulations = new ArrayList<>();
         for (int i = 0; i < simulations.size(); i++) {
@@ -86,68 +95,27 @@ public class GenerationUtils {
         }
     }
 
-    /*public static List<Simulation> evolveGeneration(Handler handler, double evolutionChance, List<Simulation> simulations) {
-        sort(simulations);
-        List<Simulation> newGeneration = new ArrayList<>();
-
-        newGeneration.add(new Simulation(handler, simulations.get(0).getWeights()));
-        newGeneration.add(new Simulation(handler, simulations.get(1).getWeights()));
-        newGeneration.add(new Simulation(handler, simulations.get(2).getWeights()));
-        newGeneration.add(new Simulation(handler, simulations.get(3).getWeights()));
-        newGeneration.add(new Simulation(handler, simulations.get(4).getWeights()));
-
-        for (int i = 5; i < 15; i++) {
-            newGeneration.add(
-                new Simulation(
-                    handler,
-                    reproduce(
-                        simulations.get(i).getWeights(),
-                        simulations.get(i+5).getWeights()
-                    )
-                )
-            );
-
-            newGeneration.add(
-                new Simulation(
-                    handler,
-                    evolve(
-                        evolutionChance,
-                        simulations.get(i).getWeights()
-                    )
-                )
-            );
-        }
-
-        return newGeneration;
-    }*/
-
     private static void sort(List<Car> cars) {
         Collections.sort(cars, new Comparator<Car>(){
             @Override
             public int compare(Car nr1, Car nr2){
-                if (nr1.getFitness() < nr2.getFitness()) return -1;
-                if (nr1.getFitness() > nr2.getFitness()) return 1;
+                if (nr1.getFitness() < nr2.getFitness()) return 1;
+                if (nr1.getFitness() > nr2.getFitness()) return -1;
                 return 0;
             }
         });
     }
 
-    public static boolean isDone(List<Simulation> simulations) {
-        if (simulations == null || simulations.isEmpty()) {
-            return true;
-        }
-
-        for (Simulation simulation : simulations) {
-            if (!simulation.isDeadOrDone()) {
-                return false;
-            }
+    public static boolean isDone() {
+        if (!GenerationStatus.allDone()) {
+            return false;
         }
 
         return true;
     }
 
     public static Car getBestPerformer(List<Simulation> simulations) {
-        if (!isDone(simulations)) {
+        if (!isDone()) {
             return null;
         }
 

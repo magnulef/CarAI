@@ -80,6 +80,7 @@ public class Simulation implements Runnable {
     public synchronized void stop() {
         try {
             running = false;
+            GenerationStatus.threadIsDone();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
