@@ -247,7 +247,7 @@ public class Car extends GameObject {
         calculateVelocity(1);
         calculatePosition(1);
 
-        carRenderer.addDrift(isDrifting, handler, position, WIDTH);
+        //carRenderer.addDrift(isDrifting, handler, position, WIDTH);
         carRenderer.addVisionLines(handler, direction, position);
     }
 
@@ -336,19 +336,26 @@ public class Car extends GameObject {
         switch (action) {
             case FORWARD:
                 keyUp = true;
+                break;
             case FORWARD_RIGHT:
                 keyUp = true;
                 keyRight = true;
+                break;
             case FORWARD_LEFT:
                 keyUp = true;
                 keyLeft = true;
+                break;
             case RIGHT:
                 keyRight = true;
+                break;
             case LEFT:
                 keyLeft = true;
+                break;
             case BREAK:
                 keyBreak = true;
+                break;
             case NOTHING:
+                break;
         }
 
         //System.out.println(action);

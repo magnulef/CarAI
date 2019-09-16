@@ -32,15 +32,15 @@ public class NeuralNetwork {
                 .nOut(8)
                 .activation(Activation.ELU)
                 .build())
-            /*.layer(2, new DenseLayer.Builder()
-                .nIn(6)
-                .nOut(8)
-                .activation(Activation.ELU)
-                .build())*/
-            .layer(2, new OutputLayer.Builder()
+            .layer(2, new DenseLayer.Builder()
                 .nIn(8)
-                //.nOut(6)
-                .nOut(5)
+                .nOut(8)
+                .activation(Activation.SIGMOID)
+                .build())
+            .layer(3, new OutputLayer.Builder()
+                .nIn(8)
+                .nOut(6)
+                //.nOut(5)
                 .activation(Activation.RELU)
                 //.weightInit(WeightInit.XAVIER)
                 .build())
@@ -86,8 +86,8 @@ public class NeuralNetwork {
                 return Actions.RIGHT;
             case 4:
                 return Actions.LEFT;
-            /*case 5:
-                return Actions.BREAK;*/
+            case 5:
+                return Actions.BREAK;
             default:
                 return Actions.FORWARD;
             /*case 6:

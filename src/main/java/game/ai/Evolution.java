@@ -62,17 +62,18 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(4, 50);
+            currentGeneration = initial(4, 25);
         }
 
         startGeneration();
         runGeneration();
-        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.20, currentGeneration);
+        clearHandler();
+        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.10, currentGeneration);
         Car best = GenerationUtils.getBestPerformer(currentGeneration);
         System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
         System.out.println("Average fitness: " + GenerationUtils.getAverageFitness(currentGeneration));
         //handlePreviousThreads(currentGeneration);
-        clearHandler();
+        //clearHandler();
         currentGeneration.clear();
         currentGeneration = newGeneration;
         GenerationStatus.restart();
@@ -125,7 +126,7 @@ public class Evolution {
         for (int i = 0; i < simulationSize; i++) {
             List<Car> cars = new ArrayList<>();
             for (int j = 0; j < generationGroupSize; j++) {
-                cars.add(new Car(handler, null, false, false, false, true));
+                cars.add(new Car(handler, null, false, true, false, true));
             }
             simulations.add(new Simulation(i ,cars, handler));
         }

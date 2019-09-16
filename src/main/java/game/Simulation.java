@@ -27,7 +27,8 @@ public class Simulation implements Runnable {
     public Simulation(int number, List<Car> cars, Handler handler) {
         this.number = number;
         this.cars = cars;
-        cars.forEach(car -> handler.addGameObject(car));
+
+        this.cars.forEach(car -> handler.addGameObject(car));
     }
 
     public Simulation(int number, Handler handler, boolean keyBoardEnabled) {
