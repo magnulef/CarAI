@@ -21,17 +21,19 @@ public class GenerationUtils {
         for (Simulation simulation : simulations) {
             cars.addAll(simulation.getCars());
         }
-        System.out.println("Got all cars: " + cars.size());
 
         sort(cars);
-        System.out.println("Sorted");
+
         List<Car> newCars = new ArrayList<>();
         int top = cars.size() / 10;
         for (int i = 0; i < top; i++) {
-            newCars.add(cars.get(i).clone(handler));
+            Car car = cars.get(i);
+            if (car.getFitness() > 500) {
+                newCars.add(car.clone(handler, true));
+            } else {
+                newCars.add(car.clone(handler, false));
+            }
         }
-
-        System.out.println("Added best cars: " + newCars.size());
 
         for (int i = 0; i <= top * 4; i = i + 2) {
             newCars.add(
@@ -49,9 +51,8 @@ public class GenerationUtils {
             );
         }
 
-        System.out.println("Reproduced cars: " + newCars.size());
-
         int index = top * 4 + 1;
+        //TODO INCREASE SPEED
         while(cars.size() > newCars.size()) {
             if (cars.size() <= index) {
                 mutateRandom(handler, mutationChance, cars.size(), newCars);
@@ -62,8 +63,6 @@ public class GenerationUtils {
             Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
             newCars.add(new Car(handler, evolvedWeights, false, false, false, true));
         }
-
-        System.out.println("Mutated cars: " + newCars.size());
 
         List<Simulation> newSimulations = new ArrayList<>();
         for (int i = 0; i < simulations.size(); i++) {
@@ -203,7 +202,6 @@ public class GenerationUtils {
                 if (random < evolutionChance) {
                     if (random < evolutionChance/2) {
                         weight[i] = weight[i] * (1 + (float)Math.random());
-                        //weight[i] = weight[i] - (weight[i] * (float)Math.random());
                     } else {
                         weight[i] = weight[i] * (1 - (float)Math.random());
                     }

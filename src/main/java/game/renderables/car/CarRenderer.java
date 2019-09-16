@@ -2,6 +2,7 @@ package game.renderables.car;
 
 import game.Handler;
 import game.renderables.GameObject;
+import game.renderables.Track;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -77,7 +78,7 @@ public class CarRenderer {
 
         Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
 
-        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint, Track.getLines());
         if (intersectionPoint != null) {
             return new VisionLine(start, null, intersectionPoint);
         }

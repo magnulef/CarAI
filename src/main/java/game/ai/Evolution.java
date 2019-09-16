@@ -9,11 +9,13 @@ import game.renderables.Track;
 import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class Evolution {
+
+    private static final Track track = new Track();
+    private static final RewardGates rewardGates = new RewardGates(true);
 
     private final Handler handler;
 
@@ -54,7 +56,6 @@ public class Evolution {
             return false;
         }
 
-        //currentGeneration.add(new Simulation(handler, true));
         currentGeneration.add(new Simulation(0, handler, null));
         startGeneration();
         return true;
@@ -62,26 +63,25 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(4, 50);
+            currentGeneration = initial(8, 25);
         }
 
         startGeneration();
         runGeneration();
         clearHandler();
         List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.10, currentGeneration);
-        Car best = GenerationUtils.getBestPerformer(currentGeneration);
-        System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
-        System.out.println("Average fitness: " + GenerationUtils.getAverageFitness(currentGeneration));
-        //handlePreviousThreads(currentGeneration);
-        //clearHandler();
+        fitnessCheck();
         currentGeneration.clear();
         currentGeneration = newGeneration;
         GenerationStatus.restart();
         return false;
     }
 
-    Track track = new Track();
-    RewardGates rewardGates = new RewardGates(true);
+    private void fitnessCheck() {
+        Car best = GenerationUtils.getBestPerformer(currentGeneration);
+        System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
+        System.out.println("Average fitness: " + GenerationUtils.getAverageFitness(currentGeneration));
+    }
 
     private void clearHandler() {
         handler.clear();

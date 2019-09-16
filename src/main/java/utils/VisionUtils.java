@@ -1,15 +1,12 @@
 package utils;
 
-import game.renderables.Track;
 import game.valueobjects.Line;
 import java.awt.*;
 import java.util.List;
 
 public class VisionUtils {
 
-    public static Point doIntersect(Point start, Point end) {
-        List<Line> lines = Track.getLines();
-
+    public static Point doIntersect(Point start, Point end, List<Line> lines) {
         for (Line line : lines) {
 
             Point lineStart = line.getStart();
@@ -71,19 +68,6 @@ public class VisionUtils {
         return new Point(frontEndX, frontEndY);
     }
 
-    /*private static Point findIntersection(Line l1, Line l2) {
-        double a1 = l1.e.y - l1.s.y;
-        double b1 = l1.s.x - l1.e.x;
-        double c1 = a1 * l1.s.x + b1 * l1.s.y;
-
-        double a2 = l2.e.y - l2.s.y;
-        double b2 = l2.s.x - l2.e.x;
-        double c2 = a2 * l2.s.x + b2 * l2.s.y;
-
-        double delta = a1 * b2 - a2 * b1;
-        return new Point((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
-    }*/
-
     public static Point findIntersection(Point line1Start, Point line1End, Point line2Start, Point line2End) {
         double a1 = line1End.y - line1Start.y;
         double b1 = line1Start.x - line1End.x;
@@ -132,14 +116,12 @@ public class VisionUtils {
     }
 
     private static int orientation(Point p, Point q, Point r) {
-        // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
-        // for details of below formula.
         int val = (int)((q.getY() - p.getY()) * (r.getX() - q.getX()) -
                 (q.getX() - p.getX()) * (r.getY() - q.getY()));
 
-        if (val == 0) return 0; // colinear
+        if (val == 0) return 0;
 
-        return (val > 0)? 1: 2; // clock or counterclock wise
+        return (val > 0)? 1: 2;
     }
 
     private static boolean onSegment(Point p, Point q, Point r) {

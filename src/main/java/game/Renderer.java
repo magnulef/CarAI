@@ -1,7 +1,5 @@
 package game;
 
-import game.renderables.RewardGates;
-import game.renderables.Track;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,8 +19,6 @@ public class Renderer extends Canvas implements Runnable {
         new Window(WIDTH, HEIGHT, "CarAI", this);
         this.start();
         this.addKeyListener(new KeyInput());
-        /*this.handler.addGameObject(new Track());
-        this.handler.addGameObject(new RewardGates(false));*/
     }
 
     public synchronized void start() {
@@ -47,7 +43,6 @@ public class Renderer extends Canvas implements Runnable {
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long timer = System.currentTimeMillis();
-        int frames = 0;
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -58,12 +53,9 @@ public class Renderer extends Canvas implements Runnable {
             if (running) {
                 render();
             }
-            frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                //System.out.println("FPS: " + frames);
-                frames = 0;
             }
         }
         stop();

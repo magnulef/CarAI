@@ -9,7 +9,6 @@ import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -22,27 +21,24 @@ public class NeuralNetwork {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
             .list()
             .layer(0, new DenseLayer.Builder()
-                .nIn(8)
+                .nIn(13)
                 .nOut(8)
                 .activation(Activation.SIGMOID)
-                //.weightInit(WeightInit.XAVIER)
                 .build())
             .layer(1, new DenseLayer.Builder()
                 .nIn(8)
                 .nOut(8)
-                .activation(Activation.RELU)
+                .activation(Activation.SIGMOID)
                 .build())
             .layer(2, new DenseLayer.Builder()
                 .nIn(8)
                 .nOut(8)
-                .activation(Activation.RELU)
+                .activation(Activation.SIGMOID)
                 .build())
             .layer(3, new OutputLayer.Builder()
                 .nIn(8)
-                .nOut(6)
-                //.nOut(5)
+                .nOut(7)
                 .activation(Activation.SOFTMAX)
-                //.weightInit(WeightInit.XAVIER)
                 .build())
             .pretrain(false)
             .backprop(false)
@@ -88,17 +84,11 @@ public class NeuralNetwork {
                 return Actions.LEFT;
             case 5:
                 return Actions.BREAK;
-            default:
-                return Actions.FORWARD;
-            /*case 6:
+            case 6:
                 return Actions.NOTHING;
             default:
-                return Actions.NOTHING;*/
+                return Actions.FORWARD;
         }
-    }
-
-    public Map<String, INDArray> getWeights() {
-        return network.paramTable();
     }
 
     public Map<String, INDArray> getClone() {

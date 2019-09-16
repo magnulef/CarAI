@@ -2,25 +2,32 @@ package game.valueobjects;
 
 public class InputContract {
 
-    private final VisionContract vision;
+    private final VisionContract visionEdges;
+    private final VisionContract visionRewards;
     private final double directionX;
     private final double directionY;
     private final double velocity;
 
     public InputContract(
-        VisionContract vision,
+        VisionContract visionEdges,
+        VisionContract visionRewards,
         double directionX,
         double directionY,
         double velocity
     ) {
-        this.vision = vision;
+        this.visionEdges = visionEdges;
+        this.visionRewards = visionRewards;
         this.directionX = directionX;
         this.directionY = directionY;
         this.velocity = velocity;
     }
 
-    public VisionContract getVision() {
-        return vision;
+    public VisionContract getVisionEdges() {
+        return visionEdges;
+    }
+
+    public VisionContract getVisionRewards() {
+        return visionRewards;
     }
 
     public double getDirectionX() {
@@ -36,15 +43,20 @@ public class InputContract {
     }
 
     public double[] getData() {
-        double[] data = new double[8];
-        data[0] = vision.getFrontVision();
-        data[1] = vision.getFrontLeftVision();
-        data[2] = vision.getFrontRightVision();
-        data[3] = vision.getLeftVision();
-        data[4] = vision.getRightVision();
-        data[5] = directionX;
-        data[6] = directionY;
-        data[7] = velocity;
+        double[] data = new double[13];
+        data[0] = visionEdges.getFrontVision();
+        data[1] = visionEdges.getFrontLeftVision();
+        data[2] = visionEdges.getFrontRightVision();
+        data[3] = visionEdges.getLeftVision();
+        data[4] = visionEdges.getRightVision();
+        data[5] = visionRewards.getFrontVision();
+        data[6] = visionRewards.getFrontLeftVision();
+        data[7] = visionRewards.getFrontRightVision();
+        data[8] = visionRewards.getLeftVision();
+        data[9] = visionRewards.getRightVision();
+        data[10] = directionX;
+        data[11] = directionY;
+        data[12] = velocity;
         return data;
     }
 
@@ -53,13 +65,19 @@ public class InputContract {
     }
 
     public static class Builder {
-        private VisionContract vision;
+        private VisionContract visionEdges;
+        private VisionContract visionRewards;
         private double directionX;
         private double directionY;
         private double velocity;
 
-        public Builder withVisionContract(VisionContract visionContract) {
-            this.vision = visionContract;
+        public Builder withVisionEdges(VisionContract visionEdges) {
+            this.visionEdges = visionEdges;
+            return this;
+        }
+
+        public Builder withVisionRewards(VisionContract visionRewards) {
+            this.visionRewards = visionRewards;
             return this;
         }
 
@@ -79,7 +97,7 @@ public class InputContract {
         }
 
         public InputContract build() {
-            return new InputContract(vision, directionX, directionY, velocity);
+            return new InputContract(visionEdges, visionRewards, directionX, directionY, velocity);
         }
     }
 }

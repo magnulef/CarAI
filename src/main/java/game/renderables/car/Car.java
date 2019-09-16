@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.List;
 import java.util.Map;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
@@ -60,7 +61,6 @@ public class Car extends GameObject {
     private final boolean isDeathEnabled;
 
     private double fitness;
-    private boolean oneTimeUpdate = false;
     private int previousGate = -1;
     private final boolean shouldRender;
     private final boolean renderVisionLines;
@@ -98,7 +98,18 @@ public class Car extends GameObject {
             handler,
             this.neuralNetwork.getClone(),
             this.keyBoardEnabled,
-            this.shouldRender,
+            false,
+            this.renderVisionLines,
+            this.isDeathEnabled
+        );
+    }
+
+    public Car clone(Handler handler, boolean shouldRender) {
+        return new Car(
+            handler,
+            this.neuralNetwork.getClone(),
+            this.keyBoardEnabled,
+            shouldRender,
             this.renderVisionLines,
             this.isDeathEnabled
         );
@@ -109,7 +120,6 @@ public class Car extends GameObject {
     }
 
     public boolean isDead() {
-        //System.out.println("Is dead");
         return isDead;
     }
 
@@ -148,12 +158,7 @@ public class Car extends GameObject {
     }
 
     public double getFitness() {
-        if (!oneTimeUpdate) {
-            //this.fitness = fitness + (position.y - 200);
-            oneTimeUpdate = true;
-        }
         return fitness;
-        //return fitness;
     }
 
     private void updateFitness() {
@@ -171,40 +176,32 @@ public class Car extends GameObject {
         for (Line line : RewardGates.getLines()) {
             boolean intersection = car.intersectsLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
 
-            /*if (intersection) {
-                System.out.println("check");
-            }*/
-
             if (intersection && line.getNumber() == previousGate + 1) {
                 fitness = fitness + 100;
                 previousGate = line.getNumber();
             }
         }
-
-        //fitness = fitness + (position.x - 100) + (position.y - 200);
     }
 
-    private long updateTime = System.currentTimeMillis();
+    private boolean oneTimeFitness = false;
 
     public void tick() {
-        //System.out.println(position.x + " : " + position.y);
-        /*if (shouldDie()) {
-            position = new Vec3(100, 100, 0);
-        }*/
-
         if (isDeathEnabled && (isDead || shouldDie())) {
             isDead = true;
             engineForce = 0;
 
+            if (!oneTimeFitness) {
+                Point pos = new Point((int) position.x, (int) position.y);
+                Line nextRewardLine = RewardGates.getLines().get(previousGate + 1);
+
+                double start = VisionUtils.calculateDistanceBetweenPoints(pos, nextRewardLine.getStart());
+                double end = VisionUtils.calculateDistanceBetweenPoints(pos, nextRewardLine.getEnd());
+                fitness = fitness + (200 - Math.min(start, end));
+                oneTimeFitness = true;
+            }
+
             return;
         }
-
-        /*long currentTime = System.currentTimeMillis();
-        if (updateTime + 100 > currentTime) {
-            return;
-        }
-
-        updateTime = currentTime;*/
 
         updateFitness();
         setActions();
@@ -306,8 +303,6 @@ public class Car extends GameObject {
         position.add(velocity);
     }
 
-    //private long previousAction = System.currentTimeMillis();
-
     private void setActions() {
         if (keyBoardEnabled) {
             keyDown = Keyboard.keydown[40];
@@ -317,13 +312,6 @@ public class Car extends GameObject {
             keyBreak = Keyboard.keydown[66];
             return;
         }
-
-        /*long currentTime = System.currentTimeMillis();
-        if (previousAction + 100 > currentTime) {
-            return;
-        }
-
-        previousAction = currentTime;*/
 
         keyDown = false;
         keyUp = false;
@@ -357,8 +345,6 @@ public class Car extends GameObject {
             case NOTHING:
                 break;
         }
-
-        //System.out.println(action);
     }
 
     private InputContract getInputs() {
@@ -366,13 +352,21 @@ public class Car extends GameObject {
         Point start = new Point((int) position.x, (int) position.y);
 
         return InputContract.builder()
-            .withVisionContract(
+            .withVisionEdges(
                 VisionContract.builder()
-                    .withFrontVision(vision(angle, 0, start, 200))
-                    .withRightVision(vision(angle, 1.35, start, 200))
-                    .withLeftVision(vision(angle, -1.35, start, 200))
-                    .withFrontRightVision(vision(angle, 0.55, start, 200))
-                    .withFrontLeftVision(vision(angle, -1.35, start, 200))
+                    .withFrontVision(vision(angle, 0, start, 200, Track.getLines()))
+                    .withRightVision(vision(angle, 1.35, start, 200, Track.getLines()))
+                    .withLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
+                    .withFrontRightVision(vision(angle, 0.55, start, 200, Track.getLines()))
+                    .withFrontLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
+                    .build()
+            ).withVisionRewards(
+                VisionContract.builder()
+                    .withFrontVision(vision(angle, 0, start, 200, RewardGates.getLines()))
+                    .withRightVision(vision(angle, 1.35, start, 200, RewardGates.getLines()))
+                    .withLeftVision(vision(angle, -1.35, start, 200, RewardGates.getLines()))
+                    .withFrontRightVision(vision(angle, 0.55, start, 200, RewardGates.getLines()))
+                    .withFrontLeftVision(vision(angle, -1.35, start, 200, RewardGates.getLines()))
                     .build()
             ).withDirectionX(
                 this.direction.x
@@ -383,9 +377,9 @@ public class Car extends GameObject {
             ).build();
     }
 
-    private double vision(double angle, double angleOffset, Point start, int length) {
+    private double vision(double angle, double angleOffset, Point start, int length, List<Line> lines) {
         Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
-        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint, lines);
         if (intersectionPoint != null) {
             return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
         }
