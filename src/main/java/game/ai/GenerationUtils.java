@@ -219,4 +219,33 @@ public class GenerationUtils {
 
         return alteredWeights;
     }
+
+    public static Map<String, INDArray> evolve(double mutationRate, float mutationStrength, Map<String, INDArray> oldWeights) {
+        Map<String, INDArray> alteredWeights = new HashMap<>();
+        Set<String> keys = oldWeights.keySet();
+
+        for (String key : keys) {
+            INDArray indArray = oldWeights.get(key);
+
+            float[] weight = indArray.data().asFloat();
+            for (int i = 0; i < weight.length; i++) {
+                double random = Math.random();
+                if (random < mutationRate) {
+                    if (random < mutationRate/2) {
+                        weight[i] = weight[i] * (1 + mutationStrength);
+                    } else {
+                        weight[i] = weight[i] * (1 - mutationStrength);
+                    }
+                }
+            }
+
+            FloatBuffer doubleBuffer = new FloatBuffer(weight);
+            INDArray array = indArray.dup();
+            array.setData(doubleBuffer);
+
+            alteredWeights.put(key, array);
+        }
+
+        return alteredWeights;
+    }
 }
