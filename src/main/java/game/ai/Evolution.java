@@ -62,14 +62,15 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(5, 5);
+            currentGeneration = initial(4, 50);
         }
 
         startGeneration();
         runGeneration();
-        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.15, currentGeneration);
+        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.20, currentGeneration);
         Car best = GenerationUtils.getBestPerformer(currentGeneration);
         System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
+        System.out.println("Average fitness: " + GenerationUtils.getAverageFitness(currentGeneration));
         //handlePreviousThreads(currentGeneration);
         clearHandler();
         currentGeneration.clear();
@@ -79,7 +80,7 @@ public class Evolution {
     }
 
     Track track = new Track();
-    RewardGates rewardGates = new RewardGates(true);
+    RewardGates rewardGates = new RewardGates(false);
 
     private void clearHandler() {
         handler.clear();
@@ -99,7 +100,7 @@ public class Evolution {
                 System.out.println("Generation is done!");
                 done = true;
             }
-            generationStatus();
+            //generationStatus();
         }
     }
 
@@ -112,9 +113,9 @@ public class Evolution {
     }
 
     private void generationStatus() {
-        System.out.println("NEW CHECK");
+        //System.out.println("NEW CHECK");
         for (Simulation simulation : currentGeneration) {
-            System.out.println("Simulation [" + simulation.getNumber() + "] is running: " + simulation.isRunning());
+            //System.out.println("Simulation [" + simulation.getNumber() + "] is running: " + simulation.isRunning());
             //System.out.println("Simulation: death: " + simulation.isDeadOrDone() + " running: " + simulation.isRunning());
         }
     }
@@ -124,7 +125,7 @@ public class Evolution {
         for (int i = 0; i < simulationSize; i++) {
             List<Car> cars = new ArrayList<>();
             for (int j = 0; j < generationGroupSize; j++) {
-                cars.add(new Car(handler, null, false, true, false, true));
+                cars.add(new Car(handler, null, false, false, false, true));
             }
             simulations.add(new Simulation(i ,cars, handler));
         }

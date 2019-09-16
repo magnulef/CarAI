@@ -24,23 +24,24 @@ public class NeuralNetwork {
             .layer(0, new DenseLayer.Builder()
                 .nIn(8)
                 .nOut(8)
-                .activation(Activation.SOFTMAX)
+                .activation(Activation.SIGMOID)
                 .weightInit(WeightInit.XAVIER)
                 .build())
             .layer(1, new DenseLayer.Builder()
                 .nIn(8)
-                .nOut(6)
-                .activation(Activation.ELU)
-                .build())
-            .layer(2, new DenseLayer.Builder()
-                .nIn(6)
                 .nOut(8)
                 .activation(Activation.ELU)
                 .build())
-            .layer(3, new OutputLayer.Builder()
+            /*.layer(2, new DenseLayer.Builder()
+                .nIn(6)
+                .nOut(8)
+                .activation(Activation.ELU)
+                .build())*/
+            .layer(2, new OutputLayer.Builder()
                 .nIn(8)
-                .nOut(6)
-                .activation(Activation.SOFTMAX)
+                //.nOut(6)
+                .nOut(5)
+                .activation(Activation.IDENTITY)
                 .weightInit(WeightInit.XAVIER)
                 .build())
             .pretrain(false)
@@ -71,6 +72,7 @@ public class NeuralNetwork {
     public Actions getAction(InputContract inputContract) {
         INDArray input = Nd4j.create(inputContract.getData());
         INDArray output = network.output(input);
+
         int index = findLargestIndex(output.data().asDouble());
 
         switch (index) {
@@ -84,8 +86,8 @@ public class NeuralNetwork {
                 return Actions.RIGHT;
             case 4:
                 return Actions.LEFT;
-            case 5:
-                return Actions.BREAK;
+            /*case 5:
+                return Actions.BREAK;*/
             default:
                 return Actions.FORWARD;
             /*case 6:

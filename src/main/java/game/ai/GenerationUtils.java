@@ -33,7 +33,7 @@ public class GenerationUtils {
 
         System.out.println("Added best cars: " + newCars.size());
 
-        for (int i = top; i <= top * 4; i = i + 2) {
+        for (int i = 0; i <= top * 4; i = i + 2) {
             newCars.add(
                 new Car(
                     handler,
@@ -42,7 +42,7 @@ public class GenerationUtils {
                         cars.get(i + 1).getWeight()
                     ),
                     false,
-                    true,
+                    false,
                     false,
                     true
                 )
@@ -60,7 +60,7 @@ public class GenerationUtils {
 
             Car car = cars.get(index);
             Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
-            newCars.add(new Car(handler, evolvedWeights, false, true, false, true));
+            newCars.add(new Car(handler, evolvedWeights, false, false, false, true));
         }
 
         System.out.println("Mutated cars: " + newCars.size());
@@ -132,6 +132,23 @@ public class GenerationUtils {
         return bestCandidate;
     }
 
+    public static double getAverageFitness(List<Simulation> simulations) {
+        if (!isDone()) {
+            return 0.0;
+        }
+
+        double totalFitness = 0.0;
+        int totalNumberOfCars = 0;
+        for (Simulation simulation : simulations) {
+            for (Car car : simulation.getCars()) {
+                totalFitness = totalFitness + car.getFitness();
+                totalNumberOfCars++;
+            }
+        }
+
+        return totalFitness/totalNumberOfCars;
+    }
+
     public static Map<String, INDArray> reproduce(Map<String, INDArray> parent1, Map<String, INDArray> parent2) {
         Map<String, INDArray> child = new HashMap<>();
         Set<String> keys = parent1.keySet();
@@ -185,9 +202,10 @@ public class GenerationUtils {
                 double random = Math.random();
                 if (random < evolutionChance) {
                     if (random < evolutionChance/2) {
-                        weight[i] = weight[i] - (weight[i] * (float)Math.random());
+                        weight[i] = weight[i] * (1 + (float)Math.random());
+                        //weight[i] = weight[i] - (weight[i] * (float)Math.random());
                     } else {
-                        weight[i] = weight[i] * (float)Math.random();
+                        weight[i] = weight[i] * (1 - (float)Math.random());
                     }
                 }
             }
