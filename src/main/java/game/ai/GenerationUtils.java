@@ -42,7 +42,7 @@ public class GenerationUtils {
                         cars.get(i + 1).getWeight()
                     ),
                     false,
-                    true,
+                    false,
                     false,
                     true
                 )
@@ -60,7 +60,7 @@ public class GenerationUtils {
 
             Car car = cars.get(index);
             Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
-            newCars.add(new Car(handler, evolvedWeights, false, true, false, true));
+            newCars.add(new Car(handler, evolvedWeights, false, false, false, true));
         }
 
         System.out.println("Mutated cars: " + newCars.size());
@@ -91,7 +91,7 @@ public class GenerationUtils {
             int randomTarget = (int) (Math.random() * cars.size());
             Car randomCar = cars.get(randomTarget);
             Map<String, INDArray> evolvedWeights = evolve(mutationChance, randomCar.getWeight());
-            cars.add(new Car(handler, evolvedWeights, false, true, false, true));
+            cars.add(new Car(handler, evolvedWeights, false, false, false, true));
         }
     }
 

@@ -149,7 +149,7 @@ public class Car extends GameObject {
 
     public double getFitness() {
         if (!oneTimeUpdate) {
-            this.fitness = fitness + (position.y - 200);
+            //this.fitness = fitness + (position.y - 200);
             oneTimeUpdate = true;
         }
         return fitness;

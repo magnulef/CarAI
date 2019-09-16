@@ -62,7 +62,7 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(4, 25);
+            currentGeneration = initial(4, 50);
         }
 
         startGeneration();
@@ -81,7 +81,7 @@ public class Evolution {
     }
 
     Track track = new Track();
-    RewardGates rewardGates = new RewardGates(false);
+    RewardGates rewardGates = new RewardGates(true);
 
     private void clearHandler() {
         handler.clear();
@@ -101,7 +101,6 @@ public class Evolution {
                 System.out.println("Generation is done!");
                 done = true;
             }
-            //generationStatus();
         }
     }
 
@@ -113,20 +112,12 @@ public class Evolution {
         return true;
     }
 
-    private void generationStatus() {
-        //System.out.println("NEW CHECK");
-        for (Simulation simulation : currentGeneration) {
-            //System.out.println("Simulation [" + simulation.getNumber() + "] is running: " + simulation.isRunning());
-            //System.out.println("Simulation: death: " + simulation.isDeadOrDone() + " running: " + simulation.isRunning());
-        }
-    }
-
     private List<Simulation> initial(int simulationSize, int generationGroupSize) {
         List<Simulation> simulations = new ArrayList<>();
         for (int i = 0; i < simulationSize; i++) {
             List<Car> cars = new ArrayList<>();
             for (int j = 0; j < generationGroupSize; j++) {
-                cars.add(new Car(handler, null, false, true, false, true));
+                cars.add(new Car(handler, null, false, false, false, true));
             }
             simulations.add(new Simulation(i ,cars, handler));
         }
