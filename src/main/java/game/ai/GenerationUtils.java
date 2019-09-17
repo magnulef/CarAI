@@ -30,6 +30,7 @@ public class GenerationUtils {
 
         sort(cars);
 
+        //Still wont turn
         int top = cars.size() / 10;
         TopTask topTask = new TopTask(handler, top, cars);
         MutationTask mutationTask01 = new MutationTask(0, top, 0.01, cars, handler);
@@ -37,8 +38,8 @@ public class GenerationUtils {
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
         MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.2, cars, handler);
         MutationTask mutationTask30 = new MutationTask(top * 4, top * 5, 0.3, cars, handler);
-        EvolutionStatus.setThreadCount(6);
 
+        EvolutionStatus.setThreadCount(6);
         executor.execute(topTask);
         executor.execute(mutationTask01);
         executor.execute(mutationTask10);
