@@ -1,9 +1,9 @@
 package game.ai;
 
-import game.GenerationStatus;
 import game.Handler;
 import game.Renderer;
 import game.Simulation;
+import game.ai.evolution.EvolutionStatus;
 import game.renderables.RewardGates;
 import game.renderables.Track;
 import game.renderables.car.Car;
@@ -14,12 +14,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Evolution {
 
+
+    public static final int SIMULATIONS = 8;
+    public static final int GENERATION_GROUP_SIZE = 65;
     private static final Track track = new Track();
     private static final RewardGates rewardGates = new RewardGates(true);
 
     private final Handler handler;
 
-    private double topScore;
     private List<Simulation> currentGeneration;
     private boolean evolutionStarted;
     private final boolean singlePlayer;
@@ -27,8 +29,7 @@ public class Evolution {
 
     public Evolution(boolean singlePlayer) {
         this.handler = new Handler();
-        this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-        this.topScore = 0;
+        this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
         this.currentGeneration = new ArrayList<>();
         new Renderer(handler);
         this.evolutionStarted = false;
@@ -63,24 +64,20 @@ public class Evolution {
 
     private boolean preformEvolution() {
         if (currentGeneration.isEmpty()) {
-            currentGeneration = initial(8, 25);
+            currentGeneration = initial(SIMULATIONS, GENERATION_GROUP_SIZE);
         }
 
         startGeneration();
         runGeneration();
+        AiStatus.generationComplete(currentGeneration);
+        AiStatus.standardPrint();
         clearHandler();
-        List<Simulation> newGeneration = GenerationUtils.evolveGeneration(handler, 0.10, currentGeneration);
-        fitnessCheck();
+        List<Simulation> newGeneration = GenerationUtils.evolve(executor, handler, currentGeneration);
         currentGeneration.clear();
         currentGeneration = newGeneration;
         GenerationStatus.restart();
+        EvolutionStatus.standardPrint();
         return false;
-    }
-
-    private void fitnessCheck() {
-        Car best = GenerationUtils.getBestPerformer(currentGeneration);
-        System.out.println("Best fitness: " + best != null ? best.getFitness() : "null");
-        System.out.println("Average fitness: " + GenerationUtils.getAverageFitness(currentGeneration));
     }
 
     private void clearHandler() {
@@ -97,19 +94,10 @@ public class Evolution {
             } catch (Exception ex) {
 
             }
-            if (generationCheck()) {
-                System.out.println("Generation is done!");
+            if (GenerationStatus.allDone()) {
                 done = true;
             }
         }
-    }
-
-    private boolean generationCheck() {
-        if (!GenerationStatus.allDone()) {
-            return false;
-        }
-
-        return true;
     }
 
     private List<Simulation> initial(int simulationSize, int generationGroupSize) {
@@ -132,6 +120,7 @@ public class Evolution {
 
         GenerationStatus.setThreadCount(currentGeneration.size());
 
+        AiStatus.startGeneration();
         for (Simulation simulation : currentGeneration) {
             executor.execute(simulation);
         }

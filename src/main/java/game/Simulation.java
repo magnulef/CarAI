@@ -1,5 +1,6 @@
 package game;
 
+import game.ai.GenerationStatus;
 import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,6 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class Simulation implements Runnable {
 
-    //private Thread thread;
     private final int number;
     private boolean running = false;
     private final List<Car> cars;
@@ -53,20 +53,6 @@ public class Simulation implements Runnable {
 
     public synchronized List<Car> getCars() {
         return this.cars;
-    }
-
-    public synchronized Car getFittestCar() {
-        double bestFitness = -1;
-        Car bestCandidate = null;
-        for (Car car : cars) {
-            double fitness = car.getFitness();
-            if (fitness > bestFitness) {
-                bestFitness = fitness;
-                bestCandidate = car;
-            }
-        }
-
-        return bestCandidate;
     }
 
     public synchronized void start() {

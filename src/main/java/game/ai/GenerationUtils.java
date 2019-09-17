@@ -1,8 +1,11 @@
 package game.ai;
 
-import game.GenerationStatus;
 import game.Handler;
 import game.Simulation;
+import game.ai.evolution.EvolutionStatus;
+import game.ai.evolution.MutationTask;
+import game.ai.evolution.ReproductionTask;
+import game.ai.evolution.TopTask;
 import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,64 +14,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 import org.nd4j.linalg.api.buffer.FloatBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class GenerationUtils {
 
-    public static List<Simulation> evolveGeneration(Handler handler, double mutationChance, List<Simulation> simulations) {
+    public static List<Simulation> evolve(ThreadPoolExecutor executor, Handler handler, List<Simulation> previousGeneration) {
+        EvolutionStatus.restart();
+        EvolutionStatus.startEvolution();
         List<Car> cars = new ArrayList<>();
-        for (Simulation simulation : simulations) {
+        for (Simulation simulation : previousGeneration) {
             cars.addAll(simulation.getCars());
         }
 
         sort(cars);
 
-        List<Car> newCars = new ArrayList<>();
         int top = cars.size() / 10;
-        for (int i = 0; i < top; i++) {
-            Car car = cars.get(i);
-            if (car.getFitness() > 500) {
-                newCars.add(car.clone(handler, true));
-            } else {
-                newCars.add(car.clone(handler, false));
-            }
+        TopTask topTask = new TopTask(handler, top, cars);
+        MutationTask mutationTask01 = new MutationTask(0, top, 0.01, cars, handler);
+        MutationTask mutationTask10 = new MutationTask(0, top, 0.1, cars, handler);
+        ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
+        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.2, cars, handler);
+        MutationTask mutationTask30 = new MutationTask(top * 4, top * 5, 0.3, cars, handler);
+        EvolutionStatus.setThreadCount(6);
+
+        executor.execute(topTask);
+        executor.execute(mutationTask01);
+        executor.execute(mutationTask10);
+        executor.execute(reproductionTask);
+        executor.execute(mutationTask20);
+        executor.execute(mutationTask30);
+
+        runEvolution();
+
+        while(EvolutionStatus.getTargetSize() > EvolutionStatus.getNewCars().size()) {
+            EvolutionStatus.addNewCar(new Car(handler, null, false, false, false, true));
         }
 
-        for (int i = 0; i <= top * 4; i = i + 2) {
-            newCars.add(
-                new Car(
-                    handler,
-                    reproduce(
-                        cars.get(i).getWeight(),
-                        cars.get(i + 1).getWeight()
-                    ),
-                    false,
-                    false,
-                    false,
-                    true
-                )
-            );
-        }
-
-        int index = top * 4 + 1;
-        //TODO INCREASE SPEED
-        while(cars.size() > newCars.size()) {
-            if (cars.size() <= index) {
-                mutateRandom(handler, mutationChance, cars.size(), newCars);
-                continue;
-            }
-
-            Car car = cars.get(index);
-            Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
-            newCars.add(new Car(handler, evolvedWeights, false, false, false, true));
-        }
+        EvolutionStatus.remove(cars);
 
         List<Simulation> newSimulations = new ArrayList<>();
-        for (int i = 0; i < simulations.size(); i++) {
-            int groupSize = newCars.size() / simulations.size();
+        for (int i = 0; i < previousGeneration.size(); i++) {
+            int groupSize = EvolutionStatus.getNewCars().size() / previousGeneration.size();
 
-            List<Car> grouped = newCars.subList(i * groupSize, i * groupSize + groupSize);
+            List<Car> grouped = EvolutionStatus.getNewCars().subList(i * groupSize, i * groupSize + groupSize);
             newSimulations.add(
                 new Simulation(
                     i,
@@ -81,16 +71,17 @@ public class GenerationUtils {
         return newSimulations;
     }
 
-    private static void mutateRandom(Handler handler, double mutationChance, int maxSize, List<Car> cars) {
-        if (cars.size() >= maxSize) {
-            return;
-        }
+    private static void runEvolution() {
+        boolean done = false;
+        while (!done) {
+            try {
+                Thread.sleep(200);
+            } catch (Exception ex) {
 
-        while (cars.size() < maxSize) {
-            int randomTarget = (int) (Math.random() * cars.size());
-            Car randomCar = cars.get(randomTarget);
-            Map<String, INDArray> evolvedWeights = evolve(mutationChance, randomCar.getWeight());
-            cars.add(new Car(handler, evolvedWeights, false, false, false, true));
+            }
+            if (EvolutionStatus.allDone()) {
+                done = true;
+            }
         }
     }
 
@@ -103,49 +94,6 @@ public class GenerationUtils {
                 return 0;
             }
         });
-    }
-
-    public static boolean isDone() {
-        if (!GenerationStatus.allDone()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static Car getBestPerformer(List<Simulation> simulations) {
-        if (!isDone()) {
-            return null;
-        }
-
-        double bestFitness = -1;
-        Car bestCandidate = null;
-        for (Simulation simulation : simulations) {
-            Car car = simulation.getFittestCar();
-            if (car.getFitness() > bestFitness) {
-                bestFitness = car.getFitness();
-                bestCandidate = car;
-            }
-        }
-
-        return bestCandidate;
-    }
-
-    public static double getAverageFitness(List<Simulation> simulations) {
-        if (!isDone()) {
-            return 0.0;
-        }
-
-        double totalFitness = 0.0;
-        int totalNumberOfCars = 0;
-        for (Simulation simulation : simulations) {
-            for (Car car : simulation.getCars()) {
-                totalFitness = totalFitness + car.getFitness();
-                totalNumberOfCars++;
-            }
-        }
-
-        return totalFitness/totalNumberOfCars;
     }
 
     public static Map<String, INDArray> reproduce(Map<String, INDArray> parent1, Map<String, INDArray> parent2) {
@@ -204,35 +152,6 @@ public class GenerationUtils {
                         weight[i] = weight[i] * (1 + (float)Math.random());
                     } else {
                         weight[i] = weight[i] * (1 - (float)Math.random());
-                    }
-                }
-            }
-
-            FloatBuffer doubleBuffer = new FloatBuffer(weight);
-            INDArray array = indArray.dup();
-            array.setData(doubleBuffer);
-
-            alteredWeights.put(key, array);
-        }
-
-        return alteredWeights;
-    }
-
-    public static Map<String, INDArray> evolve(double mutationRate, float mutationStrength, Map<String, INDArray> oldWeights) {
-        Map<String, INDArray> alteredWeights = new HashMap<>();
-        Set<String> keys = oldWeights.keySet();
-
-        for (String key : keys) {
-            INDArray indArray = oldWeights.get(key);
-
-            float[] weight = indArray.data().asFloat();
-            for (int i = 0; i < weight.length; i++) {
-                double random = Math.random();
-                if (random < mutationRate) {
-                    if (random < mutationRate/2) {
-                        weight[i] = weight[i] * (1 + mutationStrength);
-                    } else {
-                        weight[i] = weight[i] * (1 - mutationStrength);
                     }
                 }
             }
