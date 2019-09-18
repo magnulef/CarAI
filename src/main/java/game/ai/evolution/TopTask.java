@@ -23,7 +23,11 @@ public class TopTask implements Runnable {
 
         for (int i = 0; i < top; i++) {
             Car car = cars.get(i);
-            newCars.add(car.clone(handler, false));
+            if (car.getFitness() > 450) {
+                newCars.add(car.clone(handler, true));
+            } else {
+                newCars.add(car.clone(handler, false));
+            }
         }
 
         EvolutionStatus.addNewCars(newCars);

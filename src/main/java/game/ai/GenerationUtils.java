@@ -33,11 +33,11 @@ public class GenerationUtils {
         //Still wont turn
         int top = cars.size() / 10;
         TopTask topTask = new TopTask(handler, top, cars);
-        MutationTask mutationTask01 = new MutationTask(0, top, 0.01, cars, handler);
-        MutationTask mutationTask10 = new MutationTask(0, top, 0.1, cars, handler);
+        MutationTask mutationTask01 = new MutationTask(0, top, 0.1, 0.01f, cars, handler);
+        MutationTask mutationTask10 = new MutationTask(0, top, 0.2, 0.1f, cars, handler);
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
-        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.2, cars, handler);
-        MutationTask mutationTask30 = new MutationTask(top * 4, top * 5, 0.3, cars, handler);
+        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.3, 0.2f, cars, handler);
+        MutationTask mutationTask30 = new MutationTask(top * 4, top * 6, 0.5, 0.2f, cars, handler);
 
         EvolutionStatus.setThreadCount(6);
         executor.execute(topTask);
@@ -136,6 +136,35 @@ public class GenerationUtils {
         }
 
         return child;
+    }
+
+    public static Map<String, INDArray> evolve(double mutationChance, float mutationRate, Map<String, INDArray> oldWeights) {
+        Map<String, INDArray> alteredWeights = new HashMap<>();
+        Set<String> keys = oldWeights.keySet();
+
+        for (String key : keys) {
+            INDArray indArray = oldWeights.get(key);
+
+            float[] weight = indArray.data().asFloat();
+            for (int i = 0; i < weight.length; i++) {
+                double random = Math.random();
+                if (random < mutationChance) {
+                    if (random < mutationChance/2) {
+                        weight[i] = weight[i] + mutationRate;
+                    } else {
+                        weight[i] = weight[i] - mutationRate;
+                    }
+                }
+            }
+
+            FloatBuffer doubleBuffer = new FloatBuffer(weight);
+            INDArray array = indArray.dup();
+            array.setData(doubleBuffer);
+
+            alteredWeights.put(key, array);
+        }
+
+        return alteredWeights;
     }
 
     public static Map<String, INDArray> evolve(double evolutionChance, Map<String, INDArray> oldWeights) {

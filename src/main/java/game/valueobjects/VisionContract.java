@@ -8,18 +8,32 @@ public class VisionContract {
     private final double rightVision;
     private final double leftVision;
 
+    private final double rightCenterBackVision;
+    private final double leftCenterBackVision;
+    private final double rightBackVision;
+    private final double leftBackVision;
+
     public VisionContract(
         double frontVision,
         double frontRightVision,
         double frontLeftVision,
         double rightVision,
-        double leftVision
+        double leftVision,
+        double rightCenterBackVision,
+        double leftCenterBackVision,
+        double rightBackVision,
+        double leftBackVision
     ) {
         this.frontVision = frontVision;
         this.frontRightVision = frontRightVision;
         this.frontLeftVision = frontLeftVision;
         this.rightVision = rightVision;
         this.leftVision = leftVision;
+
+        this.rightCenterBackVision = rightCenterBackVision;
+        this.leftCenterBackVision = leftCenterBackVision;
+        this.rightBackVision = rightBackVision;
+        this.leftBackVision = leftBackVision;
     }
 
     public double getFrontVision() {
@@ -42,6 +56,22 @@ public class VisionContract {
         return leftVision;
     }
 
+    public double getRightCenterBackVision() {
+        return rightCenterBackVision;
+    }
+
+    public double getLeftCenterBackVision() {
+        return leftCenterBackVision;
+    }
+
+    public double getRightBackVision() {
+        return rightBackVision;
+    }
+
+    public double getLeftBackVision() {
+        return leftBackVision;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -52,6 +82,11 @@ public class VisionContract {
         private double frontLeftVision;
         private double rightVision;
         private double leftVision;
+
+        private double rightCenterBackVision;
+        private double leftCenterBackVision;
+        private double rightBackVision;
+        private double leftBackVision;
 
         public Builder withFrontVision(double frontVision) {
             this.frontVision = frontVision;
@@ -78,8 +113,39 @@ public class VisionContract {
             return this;
         }
 
+        //
+        public Builder withRightCenterBackVision(double rightCenterBackVision) {
+            this.rightCenterBackVision = rightCenterBackVision;
+            return this;
+        }
+
+        public Builder withLeftCenterBackVision(double leftCenterBackVision) {
+            this.leftCenterBackVision = leftCenterBackVision;
+            return this;
+        }
+
+        public Builder withRightBackVision(double rightBackVision) {
+            this.rightBackVision = rightBackVision;
+            return this;
+        }
+
+        public Builder withLeftBackVision(double leftBackVision) {
+            this.leftBackVision = leftBackVision;
+            return this;
+        }
+
         public VisionContract build() {
-            return new VisionContract(frontVision, frontRightVision, frontLeftVision, rightVision, leftVision);
+            return new VisionContract(
+                frontVision,
+                frontRightVision,
+                frontLeftVision,
+                rightVision,
+                leftVision,
+                rightCenterBackVision,
+                leftCenterBackVision,
+                rightBackVision,
+                leftBackVision
+            );
         }
     }
 }

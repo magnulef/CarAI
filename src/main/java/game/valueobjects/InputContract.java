@@ -43,20 +43,28 @@ public class InputContract {
     }
 
     public double[] getData() {
-        double[] data = new double[13];
+        double[] data = new double[21];
         data[0] = visionEdges.getFrontVision();
         data[1] = visionEdges.getFrontLeftVision();
         data[2] = visionEdges.getFrontRightVision();
         data[3] = visionEdges.getLeftVision();
         data[4] = visionEdges.getRightVision();
-        data[5] = visionRewards.getFrontVision();
-        data[6] = visionRewards.getFrontLeftVision();
-        data[7] = visionRewards.getFrontRightVision();
-        data[8] = visionRewards.getLeftVision();
-        data[9] = visionRewards.getRightVision();
-        data[10] = directionX;
-        data[11] = directionY;
-        data[12] = velocity;
+        data[5] = visionEdges.getRightCenterBackVision();
+        data[6] = visionEdges.getLeftCenterBackVision();
+        data[7] = visionEdges.getRightBackVision();
+        data[8] = visionEdges.getLeftBackVision();
+        data[9] = visionRewards.getFrontVision();
+        data[10] = visionRewards.getFrontLeftVision();
+        data[11] = visionRewards.getFrontRightVision();
+        data[12] = visionRewards.getLeftVision();
+        data[13] = visionRewards.getRightVision();
+        data[14] = visionRewards.getRightCenterBackVision();
+        data[15] = visionRewards.getLeftCenterBackVision();
+        data[16] = visionRewards.getRightBackVision();
+        data[17] = visionRewards.getLeftBackVision();
+        data[18] = directionX;
+        data[19] = directionY;
+        data[20] = velocity;
         return data;
     }
 

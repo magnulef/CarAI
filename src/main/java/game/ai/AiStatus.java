@@ -9,6 +9,7 @@ public class AiStatus {
 
     private static int generationCount = 0;
     private static double topFitness = 0;
+    private static Car bestCar = null;
     private static double averageFitness = 0;
 
     private static List<Double> averages = new ArrayList<>();
@@ -32,6 +33,7 @@ public class AiStatus {
 
                 if (car.getFitness() > bestFitness) {
                     bestFitness = car.getFitness();
+                    bestCar = car;
                 }
             }
         }

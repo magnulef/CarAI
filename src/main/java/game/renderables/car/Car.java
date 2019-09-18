@@ -359,14 +359,22 @@ public class Car extends GameObject {
                     .withLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
                     .withFrontRightVision(vision(angle, 0.55, start, 200, Track.getLines()))
                     .withFrontLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
+                    .withRightCenterBackVision(vision(angle, 2.15, start, 200, Track.getLines()))
+                    .withLeftCenterBackVision(vision(angle, -2.15, start, 200, Track.getLines()))
+                    .withRightBackVision(vision(angle, 2.75, start, 200, Track.getLines()))
+                    .withLeftBackVision(vision(angle, -2.75, start, 200, Track.getLines()))
                     .build()
             ).withVisionRewards(
                 VisionContract.builder()
-                    .withFrontVision(vision(angle, 0, start, 200, RewardGates.getLines()))
-                    .withRightVision(vision(angle, 1.35, start, 200, RewardGates.getLines()))
-                    .withLeftVision(vision(angle, -1.35, start, 200, RewardGates.getLines()))
-                    .withFrontRightVision(vision(angle, 0.55, start, 200, RewardGates.getLines()))
-                    .withFrontLeftVision(vision(angle, -1.35, start, 200, RewardGates.getLines()))
+                    .withFrontVision(rewardVision(angle, 0, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withRightVision(rewardVision(angle, 1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withLeftVision(rewardVision(angle, -1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withFrontRightVision(rewardVision(angle, 0.55, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withFrontLeftVision(rewardVision(angle, -1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withRightCenterBackVision(rewardVision(angle, 2.15, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withLeftCenterBackVision(rewardVision(angle, -2.15, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withRightBackVision(rewardVision(angle, 2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
+                    .withLeftBackVision(rewardVision(angle, -2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
                     .build()
             ).withDirectionX(
                 this.direction.x
@@ -384,7 +392,28 @@ public class Car extends GameObject {
             return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
         }
 
-        return 500.00;
+        return 300;
+    }
+
+    private double rewardVision(double angle, double angleOffset, Point start, int length, Line nextReward, List<Line> lines) {
+        Point rotatedEndPoint = VisionUtils.rotate(angle + angleOffset, length, start);
+        Point intersectionPoint = VisionUtils.doIntersect(start, rotatedEndPoint, nextReward);
+        if (intersectionPoint != null) {
+            Point blocking = VisionUtils.doIntersect(start, rotatedEndPoint, lines);
+            if (blocking == null) {
+                return VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+            }
+
+            double intersectionDistance = VisionUtils.calculateDistanceBetweenPoints(start, intersectionPoint);
+            double blockingDistance = VisionUtils.calculateDistanceBetweenPoints(start, blocking);
+            if (blockingDistance < intersectionDistance) {
+                return 300.00;
+            } else {
+                return intersectionDistance;
+            }
+        }
+
+        return 300.00;
     }
 
     @Override

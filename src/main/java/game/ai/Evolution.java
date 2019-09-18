@@ -57,7 +57,7 @@ public class Evolution {
             return false;
         }
 
-        currentGeneration.add(new Simulation(0, handler, null));
+        currentGeneration.add(new Simulation(0, handler, true));
         startGeneration();
         return true;
     }

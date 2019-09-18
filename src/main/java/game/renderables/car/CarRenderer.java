@@ -21,6 +21,11 @@ public class CarRenderer {
     private GameObject LEFTFRONT = null;
     private GameObject LEFT = null;
 
+    private GameObject LEFT_CENTER_BACK = null;
+    private GameObject RIGHT_CENTER_BACK = null;
+    private GameObject LEFTBACK = null;
+    private GameObject RIGHTBACK = null;
+
     public CarRenderer(boolean shouldRender, boolean renderLines) {
         this.shouldRender = shouldRender;
         this.renderLines = renderLines;
@@ -69,6 +74,18 @@ public class CarRenderer {
         handler.addGameObject(LEFTFRONT);
         LEFT = addVisionLine(handler, angle, -1.35, start, 200, LEFT);
         handler.addGameObject(LEFT);
+
+        LEFT_CENTER_BACK = addVisionLine(handler, angle, -2.15, start, 200, LEFT_CENTER_BACK);
+        handler.addGameObject(LEFT_CENTER_BACK);
+
+        RIGHT_CENTER_BACK = addVisionLine(handler, angle, 2.15, start, 200, RIGHT_CENTER_BACK);
+        handler.addGameObject(RIGHT_CENTER_BACK);
+
+        RIGHTBACK = addVisionLine(handler, angle, 2.75, start, 200, RIGHTBACK);
+        handler.addGameObject(RIGHTBACK);
+
+        LEFTBACK = addVisionLine(handler, angle, -2.75, start, 200, LEFTBACK);
+        handler.addGameObject(LEFTBACK);
     }
 
     private GameObject addVisionLine(Handler handler, double angle, double angleOffset, Point start, int length, GameObject gameObject) {

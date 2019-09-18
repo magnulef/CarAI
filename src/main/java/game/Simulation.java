@@ -13,6 +13,7 @@ public class Simulation implements Runnable {
     private boolean running = false;
     private final List<Car> cars;
     private long startTime;
+    private boolean singlePlayer = false;
 
     public Simulation(int number, Handler handler, List<Map<String, INDArray>> weights) {
         this.number = number;
@@ -38,10 +39,11 @@ public class Simulation implements Runnable {
             null,
             keyBoardEnabled,
             true,
-            false,
+            true,
             false
         );
 
+        this.singlePlayer = true;
         this.cars = new ArrayList<>();
         this.cars.add(car);
         handler.addGameObject(car);
@@ -83,7 +85,7 @@ public class Simulation implements Runnable {
         }
 
         //30000 = 30sec
-        if (startTime + 5000 < System.currentTimeMillis()) {
+        if (!singlePlayer && startTime + 5000 < System.currentTimeMillis()) {
             return true;
         }
 

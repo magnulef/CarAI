@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VisionUtils {
 
-    public static Point doIntersect(Point start, Point end, List<Line> lines) {
+    /*public static Point doIntersect(Point start, Point end, List<Line> lines) {
         for (Line line : lines) {
 
             Point lineStart = line.getStart();
@@ -21,6 +21,35 @@ public class VisionUtils {
             if (doesIntersect) {
                 return VisionUtils.findIntersection(start, end, lineStart, lineEnd);
             }
+        }
+
+        return null;
+    }
+*/
+    public static Point doIntersect(Point start, Point end, List<Line> lines) {
+        for (Line line : lines) {
+
+            Point intersection = doIntersect(start, end, line);
+            if (intersection != null) {
+                return intersection;
+            }
+        }
+
+        return null;
+    }
+
+    public static Point doIntersect(Point start, Point end, Line line) {
+        Point lineStart = line.getStart();
+        Point lineEnd = line.getEnd();
+        boolean doesIntersect = VisionUtils.doIntersect(
+            start,
+            end,
+            line.getStart(),
+            line.getEnd()
+        );
+
+        if (doesIntersect) {
+            return VisionUtils.findIntersection(start, end, lineStart, lineEnd);
         }
 
         return null;
