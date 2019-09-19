@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import utils.ImportInitialWeights;
 
 public class Evolution {
 
@@ -105,7 +106,7 @@ public class Evolution {
         for (int i = 0; i < simulationSize; i++) {
             List<Car> cars = new ArrayList<>();
             for (int j = 0; j < generationGroupSize; j++) {
-                cars.add(new Car(handler, null, false, false, false, true));
+                cars.add(new Car(handler, ImportInitialWeights.getImportedWeights(), false, false, false, true));
             }
             simulations.add(new Simulation(i ,cars, handler));
         }
