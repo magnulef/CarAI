@@ -27,7 +27,6 @@ public class TopTask implements Runnable {
             Car car = cars.get(i);
             if (car.getFitness() > 450) {
                 newCars.add(car.clone(handler, true));
-                System.out.println(JSON.toJson(PrintUtils.print(car.getWeight())));
             } else {
                 newCars.add(car.clone(handler, false));
             }

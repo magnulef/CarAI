@@ -4,8 +4,16 @@ import game.Simulation;
 import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import lib.json.JSON;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import utils.PrintUtils;
 
 public class AiStatus {
+
+    private static double bestOfAllTime = 0;
+    private static Map<String, INDArray> bestOfAllTimeWeight = null;
+    private static boolean hasBeenPrinted = false;
 
     private static int generationCount = 0;
     private static double topFitness = 0;
@@ -45,6 +53,11 @@ public class AiStatus {
         generationCount++;
         elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
 
+        if (topFitness > bestOfAllTime) {
+            bestOfAllTime = topFitness;
+            bestOfAllTimeWeight = bestCar.getWeight();
+            hasBeenPrinted = false;
+        }
     }
 
     public static void standardPrint() {
@@ -52,5 +65,12 @@ public class AiStatus {
         System.out.println("Top: " + topFitness);
         System.out.println("Average: " + averageFitness);
         System.out.println("Generation Elapsed time: " + elapsedTime);
+
+        if (bestOfAllTime > 450) {
+            if (!hasBeenPrinted) {
+                hasBeenPrinted = true;
+                System.out.println(JSON.toJson(PrintUtils.print(bestOfAllTime, bestOfAllTimeWeight)));
+            }
+        }
     }
 }

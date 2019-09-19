@@ -33,7 +33,6 @@ public class EvolutionStatus {
     }
 
     public static void standardPrint() {
-        System.out.println("\nEvolution Started");
         System.out.println("Evolution Elapsed time: " + (System.currentTimeMillis() - startTime) / 1000);
     }
 

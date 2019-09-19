@@ -111,7 +111,7 @@ public class TestBrain {
             printed.add(new PrintedWeight(key, weights.get(key).data().asFloat()));
         }
 
-        PrintedWeights printedWeights = new PrintedWeights(printed);
+        PrintedWeights printedWeights = new PrintedWeights(0.0, printed);
         System.out.println(JSON.toJson(printedWeights));
         convert(printedWeights);
     }
