@@ -66,6 +66,8 @@ public class Car extends GameObject {
     private final boolean shouldRender;
     private final boolean renderVisionLines;
 
+    private int velocityCounter = 0;
+
     public Car(
         Handler handler,
         Map<String, INDArray> previousWeights,
@@ -202,6 +204,16 @@ public class Car extends GameObject {
             }
 
             return;
+        }
+
+        if (velocityCounter > 200) {
+            isDead = true;
+        }
+
+        if (velocity.getSize() < 0.05) {
+            velocityCounter++;
+        } else {
+            velocityCounter = 0;
         }
 
         updateFitness();

@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 import org.nd4j.linalg.api.buffer.FloatBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import utils.ImportInitialWeights;
 import static utils.Random.random;
 
 public class GenerationUtils {
@@ -37,6 +38,8 @@ public class GenerationUtils {
         MutationTask mutationTask01 = new MutationTask(0, top, 0.2, 0.01f, cars, handler);
         MutationTask mutationTask10 = new MutationTask(0, top, 0.3, 0.1f, cars, handler);
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
+        //MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, 0.1f, cars, handler);
+        //MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, 0.2f, cars, handler);
         MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
         MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
 
@@ -51,7 +54,7 @@ public class GenerationUtils {
         runEvolution();
 
         while(EvolutionStatus.getTargetSize() > EvolutionStatus.getNewCars().size()) {
-            EvolutionStatus.addNewCar(new Car(handler, null, false, false, false, true));
+            EvolutionStatus.addNewCar(new Car(handler, ImportInitialWeights.getImportedWeights(), false, false, false, true));
         }
 
         EvolutionStatus.remove(cars);

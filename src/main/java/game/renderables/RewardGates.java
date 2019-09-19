@@ -29,33 +29,35 @@ public class RewardGates extends GameObject {
         LINES.add(new Line(10,350, 655, 350, 795));
         LINES.add(new Line(11,180, 655, 180, 795));
 
-        LINES.add(new Line(12,180, 805, 180, 965));
-        LINES.add(new Line(13,350, 805, 350, 965));
-        LINES.add(new Line(14,500, 805, 500, 965));
+        LINES.add(new Line(12,15, 800, 175, 800));
 
-        LINES.add(new Line(15,505, 800, 695, 800));
-        LINES.add(new Line(16,505, 650, 695, 650));
-        LINES.add(new Line(17,505, 525, 695, 525));
-        LINES.add(new Line(18,505, 400, 695, 400));
+        LINES.add(new Line(13,180, 805, 180, 965));
+        LINES.add(new Line(14,350, 805, 350, 965));
+        LINES.add(new Line(15,500, 805, 500, 965));
 
-        LINES.add(new Line(19,705, 400, 845, 400));
-        LINES.add(new Line(20,705, 525, 845, 525));
-        LINES.add(new Line(21,705, 650, 845, 650));
-        LINES.add(new Line(22,705, 800, 845, 800));
+        LINES.add(new Line(16,505, 800, 695, 800));
+        LINES.add(new Line(17,505, 650, 695, 650));
+        LINES.add(new Line(18,505, 525, 695, 525));
+        LINES.add(new Line(19,505, 400, 695, 400));
 
-        LINES.add(new Line(23,855, 800, 985, 800));
-        LINES.add(new Line(24,855, 650, 985, 650));
-        LINES.add(new Line(25,855, 525, 985, 525));
-        LINES.add(new Line(26,855, 400, 985, 400));
-        LINES.add(new Line(27,855, 275, 985, 275));
-        LINES.add(new Line(28,855, 150, 985, 150));
+        LINES.add(new Line(20,705, 400, 845, 400));
+        LINES.add(new Line(21,705, 525, 845, 525));
+        LINES.add(new Line(22,705, 650, 845, 650));
+        LINES.add(new Line(23,705, 800, 845, 800));
 
-        LINES.add(new Line(29,675, 15, 675, 245));
-        LINES.add(new Line(30,500, 185, 500, 245));
-        LINES.add(new Line(31,350, 15, 350, 245));
-        LINES.add(new Line(32,180, 15, 180, 145));
+        LINES.add(new Line(24,855, 800, 985, 800));
+        LINES.add(new Line(25,855, 650, 985, 650));
+        LINES.add(new Line(26,855, 525, 985, 525));
+        LINES.add(new Line(27,855, 400, 985, 400));
+        LINES.add(new Line(28,855, 275, 985, 275));
+        LINES.add(new Line(29,855, 150, 985, 150));
 
-        LINES.add(new Line(33,15, 150, 175, 150));
+        LINES.add(new Line(30,675, 15, 675, 245));
+        LINES.add(new Line(31,500, 185, 500, 245));
+        LINES.add(new Line(32,350, 15, 350, 245));
+        LINES.add(new Line(33,180, 15, 180, 145));
+
+        LINES.add(new Line(34,15, 150, 175, 150));
     }
 
     private boolean shouldRender;
