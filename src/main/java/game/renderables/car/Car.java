@@ -19,6 +19,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.Keyboard;
 import utils.Vec3;
 import utils.VisionUtils;
+import static utils.Random.random;
 
 public class Car extends GameObject {
 
@@ -215,7 +216,8 @@ public class Car extends GameObject {
 
         double diffAngle = velocity.getRelativeAngleBetween(direction);
         if (!Double.isNaN(diffAngle)) {
-            double random = Math.random() * 50;
+            //double random = Math.random() * 50;
+            double random = random() * 50;
             velocity.rotateZ(diffAngle/((50 + random) * (5 * diff)));
 
             isDrifting = Math.abs(Math.toDegrees(diffAngle)) > 30;

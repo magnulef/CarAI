@@ -94,6 +94,7 @@ public class NeuralNetwork {
         Map<String, INDArray> clone = new HashMap<>();
         Map<String, INDArray> paramTable = network.paramTable();
         for (String key : paramTable.keySet()) {
+            paramTable.get(key).data().asFloat();
             clone.put(key, paramTable.get(key).dup());
         }
 

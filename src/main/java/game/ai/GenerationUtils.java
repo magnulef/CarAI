@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 import org.nd4j.linalg.api.buffer.FloatBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import static utils.Random.random;
 
 public class GenerationUtils {
 
@@ -37,7 +38,7 @@ public class GenerationUtils {
         MutationTask mutationTask10 = new MutationTask(0, top, 0.2, 0.1f, cars, handler);
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
         MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.3, 0.2f, cars, handler);
-        MutationTask mutationTask30 = new MutationTask(top * 4, top * 6, 0.5, 0.2f, cars, handler);
+        MutationTask mutationTask30 = new MutationTask(top * 4, top * 5, 0.5, 0.2f, cars, handler);
 
         EvolutionStatus.setThreadCount(6);
         executor.execute(topTask);
@@ -110,7 +111,7 @@ public class GenerationUtils {
             float[] weight = new float[parent1Weight.length];
 
             for (int i = 0; i < parent1Weight.length; i++) {
-                double random = Math.random();
+                double random = random();
                 if (random < 0.33) {
                     weight[i] = parent1Weight[i];
                 } else if (random > 0.33 && random < 0.66) {
@@ -147,7 +148,7 @@ public class GenerationUtils {
 
             float[] weight = indArray.data().asFloat();
             for (int i = 0; i < weight.length; i++) {
-                double random = Math.random();
+                double random = random();
                 if (random < mutationChance) {
                     if (random < mutationChance/2) {
                         weight[i] = weight[i] + mutationRate;
@@ -176,12 +177,12 @@ public class GenerationUtils {
 
             float[] weight = indArray.data().asFloat();
             for (int i = 0; i < weight.length; i++) {
-                double random = Math.random();
+                double random = random();
                 if (random < evolutionChance) {
                     if (random < evolutionChance/2) {
-                        weight[i] = weight[i] * (1 + (float)Math.random());
+                        weight[i] = weight[i] * (1 + (float)random());
                     } else {
-                        weight[i] = weight[i] * (1 - (float)Math.random());
+                        weight[i] = weight[i] * (1 - (float)random());
                     }
                 }
             }

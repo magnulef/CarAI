@@ -32,7 +32,8 @@ public class MutationTask implements Runnable {
 
         for (int i = from; i < to; i++) {
             Car car = cars.get(i);
-            Map<String, INDArray> evolvedWeights = evolve(mutationChance, mutationRate, car.getWeight());
+            //Map<String, INDArray> evolvedWeights = evolve(mutationChance, mutationRate, car.getWeight());
+            Map<String, INDArray> evolvedWeights = evolve(mutationChance, car.getWeight());
             newCars.add(new Car(handler, evolvedWeights, false, false, false, true));
         }
 
