@@ -40,24 +40,29 @@ public class RewardGates extends GameObject {
         LINES.add(new Line(18,505, 525, 695, 525));
         LINES.add(new Line(19,505, 400, 695, 400));
 
-        LINES.add(new Line(20,705, 400, 845, 400));
-        LINES.add(new Line(21,705, 525, 845, 525));
-        LINES.add(new Line(22,705, 650, 845, 650));
-        LINES.add(new Line(23,705, 800, 845, 800));
+        LINES.add(new Line(20, 700, 255, 700, 395));
 
-        LINES.add(new Line(24,855, 800, 985, 800));
-        LINES.add(new Line(25,855, 650, 985, 650));
-        LINES.add(new Line(26,855, 525, 985, 525));
-        LINES.add(new Line(27,855, 400, 985, 400));
-        LINES.add(new Line(28,855, 275, 985, 275));
-        LINES.add(new Line(29,855, 150, 985, 150));
+        LINES.add(new Line(21,705, 400, 845, 400));
+        LINES.add(new Line(22,705, 525, 845, 525));
+        LINES.add(new Line(23,705, 650, 845, 650));
+        LINES.add(new Line(24,705, 800, 845, 800));
 
-        LINES.add(new Line(30,675, 15, 675, 245));
-        LINES.add(new Line(31,500, 185, 500, 245));
-        LINES.add(new Line(32,350, 15, 350, 245));
-        LINES.add(new Line(33,180, 15, 180, 145));
+        LINES.add(new Line(25, 850, 805, 850, 965));
 
-        LINES.add(new Line(34,15, 150, 175, 150));
+        LINES.add(new Line(26,855, 800, 985, 800));
+        LINES.add(new Line(27,855, 650, 985, 650));
+        LINES.add(new Line(28,855, 525, 985, 525));
+        LINES.add(new Line(29,855, 400, 985, 400));
+        LINES.add(new Line(30,855, 275, 985, 275));
+        LINES.add(new Line(31,855, 150, 985, 150));
+
+        LINES.add(new Line(32, 850, 15, 850, 145));
+        LINES.add(new Line(33,675, 15, 675, 245));
+        LINES.add(new Line(34,500, 185, 500, 245));
+        LINES.add(new Line(35,350, 15, 350, 245));
+        LINES.add(new Line(36,180, 15, 180, 145));
+
+        LINES.add(new Line(37,15, 150, 175, 150));
     }
 
     private boolean shouldRender;
