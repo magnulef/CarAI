@@ -35,11 +35,11 @@ public class GenerationUtils {
         //Still wont turn
         int top = cars.size() / 10;
         TopTask topTask = new TopTask(handler, top, cars);
-        MutationTask mutationTask01 = new MutationTask(0, top, 0.1, 0.01f, cars, handler);
-        MutationTask mutationTask10 = new MutationTask(0, top, 0.2, 0.05f, cars, handler);
+        MutationTask mutationTask01 = new MutationTask(0, top, 0.1, (float) random(), cars, handler);
+        MutationTask mutationTask10 = new MutationTask(0, top, 0.2, (float) random(), cars, handler);
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
-        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.2, (float) random(), cars, handler);
-        MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.3, (float) random(), cars, handler);
+        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
+        MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
         //MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
         //MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
 

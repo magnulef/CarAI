@@ -25,7 +25,7 @@ public class TopTask implements Runnable {
 
         for (int i = 0; i < top; i++) {
             Car car = cars.get(i);
-            if (car.getFitness() > 1000) {
+            if (car.getFitness() > 2100) {
                 newCars.add(car.clone(handler, true));
             } else {
                 newCars.add(car.clone(handler, false));
