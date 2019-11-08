@@ -378,7 +378,7 @@ public class Car extends GameObject {
                     .withRightBackVision(vision(angle, 2.75, start, 200, Track.getLines()))
                     .withLeftBackVision(vision(angle, -2.75, start, 200, Track.getLines()))
                     .build()
-            ).withVisionRewards(
+            /*)/*.withVisionRewards(
                 VisionContract.builder()
                     .withFrontVision(rewardVision(angle, 0, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
                     .withRightVision(rewardVision(angle, 1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
@@ -389,7 +389,7 @@ public class Car extends GameObject {
                     .withLeftCenterBackVision(rewardVision(angle, -2.15, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
                     .withRightBackVision(rewardVision(angle, 2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
                     .withLeftBackVision(rewardVision(angle, -2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .build()
+                    .build()*/
             ).withDirectionX(
                 this.direction.x
             ).withDirectionY(
@@ -432,6 +432,6 @@ public class Car extends GameObject {
 
     @Override
     public void render(Graphics graphics) {
-        carRenderer.renderCar(graphics, direction, position, WIDTH, HEIGHT, isDead ? Color.RED : Color.BLACK);
+        carRenderer.renderCar(graphics, direction, position, WIDTH, HEIGHT, isDead ? Color.RED : Color.GREEN);
     }
 }
