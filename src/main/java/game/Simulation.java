@@ -85,7 +85,9 @@ public class Simulation implements Runnable {
         }
 
         //30000 = 30sec
-        if (!singlePlayer && startTime + 15000 < System.currentTimeMillis()) {
+
+        //if (!singlePlayer) { 15000
+        if (!singlePlayer && startTime + 360000 < System.currentTimeMillis()) {
             return true;
         }
 

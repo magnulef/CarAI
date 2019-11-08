@@ -30,6 +30,15 @@ public class AiStatus {
         startTime = System.currentTimeMillis();
     }
 
+    public static double getTopAvg() {
+        if (tops.isEmpty()) {
+            return 0.0;
+        }
+
+        double top = tops.get(tops.size() -1);
+        return top - (top / 10);
+    }
+
     public static void generationComplete(List<Simulation> generation) {
         double totalFitness = 0.0;
         double bestFitness = -1;

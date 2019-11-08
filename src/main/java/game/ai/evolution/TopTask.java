@@ -1,6 +1,7 @@
 package game.ai.evolution;
 
 import game.Handler;
+import game.ai.AiStatus;
 import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,10 @@ public class TopTask implements Runnable {
     public void run() {
         List<Car> newCars = new ArrayList<>();
 
+        double top = AiStatus.getTopAvg();
         for (int i = 0; i < top; i++) {
             Car car = cars.get(i);
-            if (car.getFitness() > 428) {
+            if (car.getFitness() > top) {
                 newCars.add(car.clone(handler, true));
             } else {
                 newCars.add(car.clone(handler, false));

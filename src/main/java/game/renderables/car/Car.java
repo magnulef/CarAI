@@ -67,6 +67,8 @@ public class Car extends GameObject {
     private final boolean renderVisionLines;
 
     private int velocityCounter = 0;
+    private static long TIME_TO_LIVE = 2000;
+    private long timeAtPreviousGate = 0;
 
     public Car(
         Handler handler,
@@ -130,8 +132,16 @@ public class Car extends GameObject {
         return position.x < 0 || position.y < 0 || position.x > 1000 || position.y > 1000;
     }
 
+    private boolean outOfTime() {
+        if (timeAtPreviousGate != 0 && (timeAtPreviousGate + TIME_TO_LIVE) < System.currentTimeMillis()) {
+            return true;
+        }
+
+        return false;
+    }
+
     private boolean shouldDie() {
-        if (overlappingEdge() || intersectLine() || outOfBounds()) {
+        if (overlappingEdge() || intersectLine() || outOfBounds() || outOfTime()) {
             return true;
         }
 
@@ -181,6 +191,7 @@ public class Car extends GameObject {
 
             if (intersection && line.getNumber() == previousGate + 1) {
                 fitness = fitness + 100;
+                timeAtPreviousGate = System.currentTimeMillis();
                 previousGate = line.getNumber();
             }
         }
@@ -189,6 +200,10 @@ public class Car extends GameObject {
     private boolean oneTimeFitness = false;
 
     public void tick() {
+        if (timeAtPreviousGate == 0) {
+            timeAtPreviousGate = System.currentTimeMillis();
+        }
+
         if (isDeathEnabled && (isDead || shouldDie())) {
             isDead = true;
             engineForce = 0;
