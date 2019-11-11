@@ -8,18 +8,40 @@ public class InputContract {
     private final double directionY;
     private final double velocity;
 
+    private final double accelerationX;
+    private final double accelerationY;
+    private final double accelerationZ;
+    private final double tractionX;
+    private final double tractionY;
+    private final double tractionZ;
+
+
     public InputContract(
         VisionContract visionEdges,
         VisionContract visionRewards,
         double directionX,
         double directionY,
-        double velocity
+        double velocity,
+
+        double accelerationX,
+        double accelerationY,
+        double accelerationZ,
+        double tractionX,
+        double tractionY,
+        double tractionZ
     ) {
         this.visionEdges = visionEdges;
         this.visionRewards = visionRewards;
         this.directionX = directionX;
         this.directionY = directionY;
         this.velocity = velocity;
+
+        this.accelerationX = accelerationX;
+        this.accelerationY = accelerationY;
+        this.accelerationZ = accelerationZ;
+        this.tractionX = tractionX;
+        this.tractionY = tractionY;
+        this.tractionZ = tractionZ;
     }
 
     public VisionContract getVisionEdges() {
@@ -43,7 +65,7 @@ public class InputContract {
     }
 
     public double[] getData() {
-        double[] data = new double[12];
+        double[] data = new double[18];
         data[0] = visionEdges.getFrontVision();
         data[1] = visionEdges.getFrontLeftVision();
         data[2] = visionEdges.getFrontRightVision();
@@ -65,6 +87,13 @@ public class InputContract {
         data[9] = directionX;
         data[10] = directionY;
         data[11] = velocity;
+
+        data[12] = accelerationX;
+        data[13] = accelerationY;
+        data[14] = accelerationZ;
+        data[15] = tractionX;
+        data[16] = tractionY;
+        data[17] = tractionZ;
         return data;
     }
 
@@ -78,6 +107,13 @@ public class InputContract {
         private double directionX;
         private double directionY;
         private double velocity;
+
+        private double accelerationX;
+        private double accelerationY;
+        private double accelerationZ;
+        private double tractionX;
+        private double tractionY;
+        private double tractionZ;
 
         public Builder withVisionEdges(VisionContract visionEdges) {
             this.visionEdges = visionEdges;
@@ -104,8 +140,50 @@ public class InputContract {
             return this;
         }
 
+        public Builder withAccelerationX(double accelerationX) {
+            this.accelerationX = accelerationX;
+            return this;
+        }
+
+        public Builder withAccelerationY(double accelerationY) {
+            this.accelerationY = accelerationY;
+            return this;
+        }
+
+        public Builder withAccelerationZ(double accelerationZ) {
+            this.accelerationZ = accelerationZ;
+            return this;
+        }
+
+        public Builder withTractionX(double tractionX) {
+            this.tractionX = tractionX;
+            return this;
+        }
+
+        public Builder withTractionY(double tractionY) {
+            this.tractionY = tractionY;
+            return this;
+        }
+
+        public Builder withTractionZ(double tractionZ) {
+            this.tractionZ = tractionZ;
+            return this;
+        }
+
         public InputContract build() {
-            return new InputContract(visionEdges, visionRewards, directionX, directionY, velocity);
+            return new InputContract(
+                visionEdges,
+                visionRewards,
+                directionX,
+                directionY,
+                velocity,
+                accelerationX,
+                accelerationY,
+                accelerationZ,
+                tractionX,
+                tractionY,
+                tractionZ
+            );
         }
     }
 }

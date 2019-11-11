@@ -24,10 +24,10 @@ public class TopTask implements Runnable {
     public void run() {
         List<Car> newCars = new ArrayList<>();
 
-        double top = AiStatus.getTopAvg();
+        double topAvg = AiStatus.getTopAvg();
         for (int i = 0; i < top; i++) {
             Car car = cars.get(i);
-            if (car.getFitness() > top) {
+            if (car.getFitness() > topAvg) {
                 newCars.add(car.clone(handler, true));
             } else {
                 newCars.add(car.clone(handler, false));

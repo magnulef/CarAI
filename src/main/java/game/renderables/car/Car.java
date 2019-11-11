@@ -411,6 +411,18 @@ public class Car extends GameObject {
                 this.direction.y
             ).withVelocity(
                 this.velocity.getSize()
+            ).withAccelerationX(
+                this.acceleration.x
+            ).withAccelerationY(
+                this.acceleration.y
+            ).withAccelerationZ(
+                this.acceleration.z
+            ).withTractionX(
+                this.traction.x
+            ).withTractionY(
+                this.traction.y
+            ).withTractionZ(
+                this.traction.z
             ).build();
     }
 

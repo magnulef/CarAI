@@ -36,7 +36,7 @@ public class AiStatus {
         }
 
         double top = tops.get(tops.size() -1);
-        return top - (top / 10);
+        return top - (top / 20);
     }
 
     public static void generationComplete(List<Simulation> generation) {
