@@ -66,7 +66,6 @@ public class Car extends GameObject {
     private final boolean shouldRender;
     private final boolean renderVisionLines;
 
-    private int velocityCounter = 0;
     private static long TIME_TO_LIVE = 2000;
     private long timeAtPreviousGate = 0;
 
@@ -221,16 +220,6 @@ public class Car extends GameObject {
             return;
         }
 
-        if (velocityCounter > 200) {
-            isDead = true;
-        }
-
-        if (velocity.getSize() < 0.05) {
-            velocityCounter++;
-        } else {
-            velocityCounter = 0;
-        }
-
         updateFitness();
         setActions();
         double diff = TYRE * (velocity.getSize() / 30.0);
@@ -244,7 +233,8 @@ public class Car extends GameObject {
         double diffAngle = velocity.getRelativeAngleBetween(direction);
         if (!Double.isNaN(diffAngle)) {
             //double random = Math.random() * 50;
-            double random = random() * 50;
+            //double random = random() * 10;
+            double random = 25;
             velocity.rotateZ(diffAngle/((50 + random) * (5 * diff)));
 
             isDrifting = Math.abs(Math.toDegrees(diffAngle)) > 30;
@@ -383,15 +373,15 @@ public class Car extends GameObject {
         return InputContract.builder()
             .withVisionEdges(
                 VisionContract.builder()
-                    .withFrontVision(vision(angle, 0, start, 200, Track.getLines()))
-                    .withRightVision(vision(angle, 1.35, start, 200, Track.getLines()))
-                    .withLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
-                    .withFrontRightVision(vision(angle, 0.55, start, 200, Track.getLines()))
-                    .withFrontLeftVision(vision(angle, -1.35, start, 200, Track.getLines()))
-                    .withRightCenterBackVision(vision(angle, 2.15, start, 200, Track.getLines()))
-                    .withLeftCenterBackVision(vision(angle, -2.15, start, 200, Track.getLines()))
-                    .withRightBackVision(vision(angle, 2.75, start, 200, Track.getLines()))
-                    .withLeftBackVision(vision(angle, -2.75, start, 200, Track.getLines()))
+                    .withFrontVision(vision(angle, 0, start, 400, Track.getLines()))
+                    .withRightVision(vision(angle, 1.35, start, 400, Track.getLines()))
+                    .withLeftVision(vision(angle, -1.35, start, 400, Track.getLines()))
+                    .withFrontRightVision(vision(angle, 0.55, start, 400, Track.getLines()))
+                    .withFrontLeftVision(vision(angle, -1.35, start, 400, Track.getLines()))
+                    .withRightCenterBackVision(vision(angle, 2.15, start, 400, Track.getLines()))
+                    .withLeftCenterBackVision(vision(angle, -2.15, start, 400, Track.getLines()))
+                    .withRightBackVision(vision(angle, 2.75, start, 400, Track.getLines()))
+                    .withLeftBackVision(vision(angle, -2.75, start, 400, Track.getLines()))
                     .build()
             /*)/*.withVisionRewards(
                 VisionContract.builder()
@@ -409,8 +399,14 @@ public class Car extends GameObject {
                 this.direction.x
             ).withDirectionY(
                 this.direction.y
-            ).withVelocity(
-                this.velocity.getSize()
+            ).withDirectionZ(
+                this.direction.z
+            ).withVelocityX(
+                this.velocity.x
+            ).withVelocityY(
+                this.velocity.y
+            ).withVelocityZ(
+                this.velocity.z
             ).withAccelerationX(
                 this.acceleration.x
             ).withAccelerationY(

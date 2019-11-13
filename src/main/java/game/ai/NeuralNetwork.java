@@ -21,7 +21,7 @@ public class NeuralNetwork {
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
             .list()
             .layer(0, new DenseLayer.Builder()
-                .nIn(18)
+                .nIn(21)
                 .nOut(36)
                 .build())
             .layer(1, new DenseLayer.Builder()
