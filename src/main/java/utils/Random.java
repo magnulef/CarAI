@@ -6,7 +6,7 @@ public class Random {
 
     private final static Stack<Double> current = new Stack<>();
     private final static Stack<Double> previous = new Stack<>();
-    private final static int MAX_COUNT = 20000;
+    private final static int MAX_COUNT = 50000;
     private static int counter = MAX_COUNT;
 
     static {
