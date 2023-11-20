@@ -73,14 +73,14 @@ public class InputContract {
     public double[] getData() {
         double[] data = new double[21];
         data[0] = visionEdges.getFrontVision();
-        data[1] = visionEdges.getFrontLeftVision();
-        data[2] = visionEdges.getFrontRightVision();
-        data[3] = visionEdges.getLeftVision();
-        data[4] = visionEdges.getRightVision();
-        data[5] = visionEdges.getRightCenterBackVision();
-        data[6] = visionEdges.getLeftCenterBackVision();
-        data[7] = visionEdges.getRightBackVision();
-        data[8] = visionEdges.getLeftBackVision();
+        data[1] = visionEdges.getFrontAdd20();
+        data[2] = visionEdges.getFrontMinus20();
+        data[3] = visionEdges.getFrontAdd40();
+        data[4] = visionEdges.getFrontMinus40();
+        data[5] = visionEdges.getFrontAdd60();
+        data[6] = visionEdges.getFrontMinus60();
+        data[7] = visionEdges.getFrontAdd90();
+        data[8] = visionEdges.getFrontMinus90();
         /*data[9] = visionRewards.getFrontVision();
         data[10] = visionRewards.getFrontLeftVision();
         data[11] = visionRewards.getFrontRightVision();

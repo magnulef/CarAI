@@ -16,15 +16,20 @@ public class CarRenderer {
     private final boolean renderLines;
 
     private GameObject FRONT = null;
-    private GameObject RIGHTFRONT = null;
-    private GameObject RIGHT = null;
-    private GameObject LEFTFRONT = null;
-    private GameObject LEFT = null;
+    private GameObject FRONTADD20 = null;
+    private GameObject FRONTMINUS20 = null;
+    private GameObject FRONTADD40 = null;
+    private GameObject FRONTMINUS40 = null;
 
-    private GameObject LEFT_CENTER_BACK = null;
-    private GameObject RIGHT_CENTER_BACK = null;
-    private GameObject LEFTBACK = null;
-    private GameObject RIGHTBACK = null;
+    private GameObject FRONTADD60 = null;
+    private GameObject FRONTMINUS60 = null;
+    private GameObject FRONTADD80 = null;
+    private GameObject FRONTMINUS80 = null;
+
+    private GameObject FRONTADD100 = null;
+    private GameObject FRONTMINUS100 = null;
+    private GameObject FRONTADD120 = null;
+    private GameObject FRONTMINUS120 = null;
 
     public CarRenderer(boolean shouldRender, boolean renderLines) {
         this.shouldRender = shouldRender;
@@ -66,26 +71,38 @@ public class CarRenderer {
 
         FRONT = addVisionLine(handler, angle, 0, start, 200, FRONT);
         handler.addGameObject(FRONT);
-        RIGHTFRONT = addVisionLine(handler, angle, 0.55, start, 200, RIGHTFRONT);
-        handler.addGameObject(RIGHTFRONT);
-        RIGHT = addVisionLine(handler, angle, 1.35, start, 200, RIGHT);
-        handler.addGameObject(RIGHT);
-        LEFTFRONT = addVisionLine(handler, angle, -0.55, start, 200, LEFTFRONT);
-        handler.addGameObject(LEFTFRONT);
-        LEFT = addVisionLine(handler, angle, -1.35, start, 200, LEFT);
-        handler.addGameObject(LEFT);
+        FRONTADD20 = addVisionLine(handler, angle, 0.20, start, 200, FRONTADD20);
+        handler.addGameObject(FRONTADD20);
+        FRONTMINUS20 = addVisionLine(handler, angle, -0.20, start, 200, FRONTMINUS20);
+        handler.addGameObject(FRONTMINUS20);
+        FRONTADD40 = addVisionLine(handler, angle, 0.40, start, 200, FRONTADD40);
+        handler.addGameObject(FRONTADD40);
+        FRONTMINUS40 = addVisionLine(handler, angle, -0.40, start, 200, FRONTMINUS40);
+        handler.addGameObject(FRONTMINUS40);
 
-        LEFT_CENTER_BACK = addVisionLine(handler, angle, -2.15, start, 200, LEFT_CENTER_BACK);
-        handler.addGameObject(LEFT_CENTER_BACK);
+        FRONTADD60 = addVisionLine(handler, angle, -0.60, start, 200, FRONTADD60);
+        handler.addGameObject(FRONTADD60);
 
-        RIGHT_CENTER_BACK = addVisionLine(handler, angle, 2.15, start, 200, RIGHT_CENTER_BACK);
-        handler.addGameObject(RIGHT_CENTER_BACK);
+        FRONTMINUS60 = addVisionLine(handler, angle, 0.60, start, 200, FRONTMINUS60);
+        handler.addGameObject(FRONTMINUS60);
 
-        RIGHTBACK = addVisionLine(handler, angle, 2.75, start, 200, RIGHTBACK);
-        handler.addGameObject(RIGHTBACK);
+        FRONTADD80 = addVisionLine(handler, angle, 0.80, start, 200, FRONTADD80);
+        handler.addGameObject(FRONTADD80);
 
-        LEFTBACK = addVisionLine(handler, angle, -2.75, start, 200, LEFTBACK);
-        handler.addGameObject(LEFTBACK);
+        FRONTMINUS80 = addVisionLine(handler, angle, -0.80, start, 200, FRONTMINUS80);
+        handler.addGameObject(FRONTMINUS80);
+
+        FRONTADD100 = addVisionLine(handler, angle, -1.0, start, 200, FRONTADD100);
+        handler.addGameObject(FRONTADD100);
+
+        FRONTMINUS100 = addVisionLine(handler, angle, 1.0, start, 200, FRONTMINUS100);
+        handler.addGameObject(FRONTMINUS100);
+
+        FRONTADD120 = addVisionLine(handler, angle, 1.20, start, 200, FRONTADD120);
+        handler.addGameObject(FRONTADD120);
+
+        FRONTMINUS120 = addVisionLine(handler, angle, -1.20, start, 200, FRONTMINUS120);
+        handler.addGameObject(FRONTMINUS120);
     }
 
     private GameObject addVisionLine(Handler handler, double angle, double angleOffset, Point start, int length, GameObject gameObject) {

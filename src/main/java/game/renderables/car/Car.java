@@ -374,27 +374,15 @@ public class Car extends GameObject {
             .withVisionEdges(
                 VisionContract.builder()
                     .withFrontVision(vision(angle, 0, start, 400, Track.getLines()))
-                    .withRightVision(vision(angle, 1.35, start, 400, Track.getLines()))
-                    .withLeftVision(vision(angle, -1.35, start, 400, Track.getLines()))
-                    .withFrontRightVision(vision(angle, 0.55, start, 400, Track.getLines()))
-                    .withFrontLeftVision(vision(angle, -1.35, start, 400, Track.getLines()))
-                    .withRightCenterBackVision(vision(angle, 2.15, start, 400, Track.getLines()))
-                    .withLeftCenterBackVision(vision(angle, -2.15, start, 400, Track.getLines()))
-                    .withRightBackVision(vision(angle, 2.75, start, 400, Track.getLines()))
-                    .withLeftBackVision(vision(angle, -2.75, start, 400, Track.getLines()))
+                    .withFrontAdd20(vision(angle, 0.20, start, 400, Track.getLines()))
+                    .withFrontMinus20(vision(angle, -0.20, start, 400, Track.getLines()))
+                    .withFrontAdd40(vision(angle, 0.40, start, 400, Track.getLines()))
+                    .withFrontMinus40(vision(angle, -0.40, start, 400, Track.getLines()))
+                    .withFrontAdd60(vision(angle, 0.60, start, 400, Track.getLines()))
+                    .withFrontMinus60(vision(angle, -0.60, start, 400, Track.getLines()))
+                    .withFrontAdd90(vision(angle, 0.90, start, 400, Track.getLines()))
+                    .withFrontMinus90(vision(angle, -0.90, start, 400, Track.getLines()))
                     .build()
-            /*)/*.withVisionRewards(
-                VisionContract.builder()
-                    .withFrontVision(rewardVision(angle, 0, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withRightVision(rewardVision(angle, 1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withLeftVision(rewardVision(angle, -1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withFrontRightVision(rewardVision(angle, 0.55, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withFrontLeftVision(rewardVision(angle, -1.35, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withRightCenterBackVision(rewardVision(angle, 2.15, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withLeftCenterBackVision(rewardVision(angle, -2.15, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withRightBackVision(rewardVision(angle, 2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .withLeftBackVision(rewardVision(angle, -2.75, start, 200, RewardGates.getLines().get(previousGate + 1), Track.getLines()))
-                    .build()*/
             ).withDirectionX(
                 this.direction.x
             ).withDirectionY(

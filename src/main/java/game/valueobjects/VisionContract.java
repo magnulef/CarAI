@@ -3,148 +3,148 @@ package game.valueobjects;
 public class VisionContract {
 
     private final double frontVision;
-    private final double frontRightVision;
-    private final double frontLeftVision;
-    private final double rightVision;
-    private final double leftVision;
+    private final double frontAdd20;
+    private final double frontMinus20;
+    private final double frontAdd40;
+    private final double frontMinus40;
 
-    private final double rightCenterBackVision;
-    private final double leftCenterBackVision;
-    private final double rightBackVision;
-    private final double leftBackVision;
+    private final double frontAdd60;
+    private final double frontMinus60;
+    private final double frontAdd90;
+    private final double frontMinus90;
 
     public VisionContract(
         double frontVision,
-        double frontRightVision,
-        double frontLeftVision,
-        double rightVision,
-        double leftVision,
-        double rightCenterBackVision,
-        double leftCenterBackVision,
-        double rightBackVision,
-        double leftBackVision
+        double frontAdd20,
+        double frontMinus20,
+        double frontAdd40,
+        double frontMinus40,
+        double frontAdd60,
+        double frontMinus60,
+        double frontAdd90,
+        double frontMinus90
     ) {
         this.frontVision = frontVision;
-        this.frontRightVision = frontRightVision;
-        this.frontLeftVision = frontLeftVision;
-        this.rightVision = rightVision;
-        this.leftVision = leftVision;
+        this.frontAdd20 = frontAdd20;
+        this.frontMinus20 = frontMinus20;
+        this.frontAdd40 = frontAdd40;
+        this.frontMinus40 = frontMinus40;
 
-        this.rightCenterBackVision = rightCenterBackVision;
-        this.leftCenterBackVision = leftCenterBackVision;
-        this.rightBackVision = rightBackVision;
-        this.leftBackVision = leftBackVision;
+        this.frontAdd60 = frontAdd60;
+        this.frontMinus60 = frontMinus60;
+        this.frontAdd90 = frontAdd90;
+        this.frontMinus90 = frontMinus90;
     }
 
     public double getFrontVision() {
         return frontVision;
     }
 
-    public double getFrontRightVision() {
-        return frontRightVision;
-    }
-
-    public double getFrontLeftVision() {
-        return frontLeftVision;
-    }
-
-    public double getRightVision() {
-        return rightVision;
-    }
-
-    public double getLeftVision() {
-        return leftVision;
-    }
-
-    public double getRightCenterBackVision() {
-        return rightCenterBackVision;
-    }
-
-    public double getLeftCenterBackVision() {
-        return leftCenterBackVision;
-    }
-
-    public double getRightBackVision() {
-        return rightBackVision;
-    }
-
-    public double getLeftBackVision() {
-        return leftBackVision;
-    }
-
     public static Builder builder() {
         return new Builder();
     }
 
+    public double getFrontAdd20() {
+        return frontAdd20;
+    }
+
+    public double getFrontMinus20() {
+        return frontMinus20;
+    }
+
+    public double getFrontAdd40() {
+        return frontAdd40;
+    }
+
+    public double getFrontMinus40() {
+        return frontMinus40;
+    }
+
+    public double getFrontAdd60() {
+        return frontAdd60;
+    }
+
+    public double getFrontMinus60() {
+        return frontMinus60;
+    }
+
+    public double getFrontAdd90() {
+        return frontAdd90;
+    }
+
+    public double getFrontMinus90() {
+        return frontMinus90;
+    }
+
     public static class Builder {
         private double frontVision;
-        private double frontRightVision;
-        private double frontLeftVision;
-        private double rightVision;
-        private double leftVision;
+        private double frontAdd20;
+        private double frontMinus20;
+        private double frontAdd40;
+        private double frontMinus40;
 
-        private double rightCenterBackVision;
-        private double leftCenterBackVision;
-        private double rightBackVision;
-        private double leftBackVision;
+        private double frontAdd60;
+        private double frontMinus60;
+        private double frontAdd90;
+        private double frontMinus90;
 
         public Builder withFrontVision(double frontVision) {
             this.frontVision = frontVision;
             return this;
         }
 
-        public Builder withFrontRightVision(double frontRightVision) {
-            this.frontRightVision = frontRightVision;
+        public Builder withFrontAdd20(double frontAdd20) {
+            this.frontAdd20 = frontAdd20;
             return this;
         }
 
-        public Builder withFrontLeftVision(double frontLeftVision) {
-            this.frontLeftVision = frontLeftVision;
+        public Builder withFrontMinus20(double frontMinus20) {
+            this.frontMinus20 = frontMinus20;
             return this;
         }
 
-        public Builder withRightVision(double rightVision) {
-            this.rightVision = rightVision;
+        public Builder withFrontAdd40(double frontAdd40) {
+            this.frontAdd40 = frontAdd40;
             return this;
         }
 
-        public Builder withLeftVision(double leftVision) {
-            this.leftVision = leftVision;
+        public Builder withFrontMinus40(double frontMinus40) {
+            this.frontMinus40 = frontMinus40;
             return this;
         }
 
         //
-        public Builder withRightCenterBackVision(double rightCenterBackVision) {
-            this.rightCenterBackVision = rightCenterBackVision;
+        public Builder withFrontAdd60(double frontAdd60) {
+            this.frontAdd60 = frontAdd60;
             return this;
         }
 
-        public Builder withLeftCenterBackVision(double leftCenterBackVision) {
-            this.leftCenterBackVision = leftCenterBackVision;
+        public Builder withFrontMinus60(double frontMinus60) {
+            this.frontMinus60 = frontMinus60;
             return this;
         }
 
-        public Builder withRightBackVision(double rightBackVision) {
-            this.rightBackVision = rightBackVision;
+        public Builder withFrontAdd90(double frontAdd90) {
+            this.frontAdd90 = frontAdd90;
             return this;
         }
 
-        public Builder withLeftBackVision(double leftBackVision) {
-            this.leftBackVision = leftBackVision;
+        public Builder withFrontMinus90(double frontMinus90) {
+            this.frontMinus90 = frontMinus90;
             return this;
         }
 
         public VisionContract build() {
             return new VisionContract(
                 frontVision,
-                frontRightVision,
-                frontLeftVision,
-                rightVision,
-                leftVision,
-                rightCenterBackVision,
-                leftCenterBackVision,
-                rightBackVision,
-                leftBackVision
+                frontAdd20,
+                frontMinus20,
+                frontAdd40,
+                frontMinus40,
+                frontAdd60,
+                frontMinus60,
+                frontAdd90,
+                frontMinus90
             );
         }
     }
