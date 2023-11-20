@@ -5,7 +5,7 @@ import game.renderables.car.Car;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import lib.json.JSON;
+import library.json.JSON;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import utils.PrintUtils;
 

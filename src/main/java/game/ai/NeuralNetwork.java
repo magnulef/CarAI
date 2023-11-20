@@ -39,8 +39,8 @@ public class NeuralNetwork {
                 .nOut(7)
                 .activation(Activation.SOFTMAX)
                 .build())
-            .pretrain(false)
-            .backprop(false)
+            //.pretrain(false)
+            //.backprop(false)
             .build();
 
         network = new MultiLayerNetwork(configuration);

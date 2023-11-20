@@ -1,4 +1,4 @@
-import lib.json.JSON;
+import library.json.JSON;
 import org.testng.annotations.Test;
 
 public class TestJson {

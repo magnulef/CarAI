@@ -15,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
+//import org.nd4j.linalg.api.buffer.FloatBuffer;
 import org.nd4j.linalg.api.buffer.FloatBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
+//import org.nd4j.linalg.cpu.nativecpu.buffer.FloatBuffer;
 import utils.ImportInitialWeights;
 import static utils.Random.random;
 
@@ -31,8 +33,7 @@ public class GenerationUtils {
         }
 
         sort(cars);
-
-        //Still wont turn
+        /*
         int top = cars.size() / 10;
         TopTask topTask = new TopTask(handler, top, cars);
         MutationTask mutationTask01 = new MutationTask(0, top, 0.1, (float) random(), cars, handler);
@@ -40,20 +41,16 @@ public class GenerationUtils {
         ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
         MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
         MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
-        //MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
-        //MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
 
-        /*  Old
-
-        TopTask topTask = new TopTask(handler, top, cars);
-        MutationTask mutationTask01 = new MutationTask(0, top, 0.2, 0.01f, cars, handler);
-        MutationTask mutationTask10 = new MutationTask(0, top, 0.3, 0.1f, cars, handler);
-        ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
-        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, 0.1f, cars, handler);
-        MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, 0.2f, cars, handler);
-        //MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
-        //MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.7, (float) random(), cars, handler);
          */
+
+        int top = cars.size() / 10;
+        TopTask topTask = new TopTask(handler, top, cars);
+        MutationTask mutationTask01 = new MutationTask(0, top, 0.1, (float) random(), cars, handler);
+        MutationTask mutationTask10 = new MutationTask(0, top, 0.2, (float) random(), cars, handler);
+        ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
+        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
+        MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.8, (float) random(), cars, handler);
 
         EvolutionStatus.setThreadCount(6);
         executor.execute(topTask);

@@ -30,7 +30,7 @@ public class Evolution {
 
     public Evolution(boolean singlePlayer) {
         this.handler = new Handler();
-        this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
+        this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(16);
         this.currentGeneration = new ArrayList<>();
         new Renderer(handler);
         this.evolutionStarted = false;
