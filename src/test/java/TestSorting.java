@@ -3,8 +3,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import library.json.JSON;
 import org.testng.annotations.Test;
+import utils.json.JSON;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 

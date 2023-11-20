@@ -1,8 +1,8 @@
 package utils;
 
 import java.util.Map;
-import library.json.JSON;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import utils.json.JSON;
 
 public class ImportInitialWeights {
 

@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import library.json.JSON;
 import org.bytedeco.javacpp.Loader;
 import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.api.buffer.FloatBuffer;
@@ -12,6 +11,7 @@ import utils.ImportInitialWeights;
 import utils.PrintUtils;
 import utils.PrintedWeight;
 import utils.PrintedWeights;
+import utils.json.JSON;
 
 public class TestParser {
 

@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import library.json.JSON;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -20,6 +19,7 @@ import org.nd4j.linalg.util.NDArrayUtil;
 import org.testng.annotations.Test;
 import utils.PrintedWeight;
 import utils.PrintedWeights;
+import utils.json.JSON;
 
 public class TestBrain {
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import library.json.JSON;
 import org.bytedeco.javacpp.Loader;
 import org.nd4j.linalg.api.buffer.DataBuffer;
 //import org.nd4j.linalg.api.buffer.FloatBuffer;
