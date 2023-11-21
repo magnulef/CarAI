@@ -25,11 +25,8 @@ public class Pascal {
             List<Integer> newRow = new ArrayList<>();
             newRow.add(1);
 
-            for (int j = 0; j < pascal.get(i).size(); j++) {
+            for (int j = 0; j < pascal.get(i).size() - 1; j++) {
                 List<Integer> holder = pascal.get(i);
-                if (j == holder.size() - 1) {
-                    break;
-                }
                 newRow.add(holder.get(j) + holder.get(j + 1));
             }
 
