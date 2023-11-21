@@ -19,7 +19,7 @@ public class Evolution {
     public static final int SIMULATIONS = 8;
     public static final int GENERATION_GROUP_SIZE = 100;
     private static final Track track = new Track();
-    private static final RewardGates rewardGates = new RewardGates(true);
+    private static final RewardGates rewardGates = new RewardGates(false);
 
     private final Handler handler;
 
@@ -32,7 +32,7 @@ public class Evolution {
         this.handler = new Handler();
         this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(16);
         this.currentGeneration = new ArrayList<>();
-        new Renderer(handler);
+        //new Renderer(handler);
         this.evolutionStarted = false;
         this.singlePlayer = singlePlayer;
     }

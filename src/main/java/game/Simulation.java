@@ -104,7 +104,7 @@ public class Simulation implements Runnable {
     public void run() {
         start();
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
+        double amountOfTicks = 20;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         while (running) {

@@ -71,7 +71,7 @@ public class InputContract {
     }
 
     public double[] getData() {
-        double[] data = new double[21];
+        double[] data = new double[46];
         data[0] = visionEdges.getFrontVision();
         data[1] = visionEdges.getFrontAdd20();
         data[2] = visionEdges.getFrontMinus20();
@@ -90,19 +90,37 @@ public class InputContract {
         data[15] = visionEdges.getFrontAdd160();
         data[16] = visionEdges.getFrontMinus160();
 
-        data[9] = directionX;
-        data[10] = directionY;
-        data[11] = directionZ;
-        data[12] = velocityX;
-        data[13] = velocityY;
-        data[14] = velocityZ;
+        data[17] = visionRewards.getFrontVision();
+        data[18] = visionRewards.getFrontAdd20();
+        data[19] = visionRewards.getFrontMinus20();
+        data[20] = visionRewards.getFrontAdd40();
+        data[21] = visionRewards.getFrontMinus40();
+        data[22] = visionRewards.getFrontAdd60();
+        data[23] = visionRewards.getFrontMinus60();
+        data[24] = visionRewards.getFrontAdd80();
+        data[25] = visionRewards.getFrontMinus80();
+        data[26] = visionRewards.getFrontAdd100();
+        data[27] = visionRewards.getFrontMinus100();
+        data[28] = visionRewards.getFrontAdd120();
+        data[29] = visionRewards.getFrontMinus120();
+        data[30] = visionRewards.getFrontAdd140();
+        data[31] = visionRewards.getFrontMinus140();
+        data[32] = visionRewards.getFrontAdd160();
+        data[33] = visionRewards.getFrontMinus160();
 
-        data[15] = accelerationX;
-        data[16] = accelerationY;
-        data[17] = accelerationZ;
-        data[18] = tractionX;
-        data[19] = tractionY;
-        data[20] = tractionZ;
+        data[34] = directionX;
+        data[35] = directionY;
+        data[36] = directionZ;
+        data[37] = velocityX;
+        data[38] = velocityY;
+        data[39] = velocityZ;
+
+        data[40] = accelerationX;
+        data[41] = accelerationY;
+        data[42] = accelerationZ;
+        data[43] = tractionX;
+        data[44] = tractionY;
+        data[45] = tractionZ;
         return data;
     }
 

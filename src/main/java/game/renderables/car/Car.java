@@ -391,6 +391,26 @@ public class Car extends GameObject {
                     .withFrontAdd160(vision(angle, 1.60, start, 400, Track.getLines()))
                     .withFrontMinus160(vision(angle, -1.60, start, 400, Track.getLines()))
                     .build()
+            ).withVisionRewards(
+                VisionContract.builder()
+                    .withFrontVision(vision(angle, 0, start, 400, RewardGates.getLines()))
+                    .withFrontAdd20(vision(angle, 0.20, start, 400, RewardGates.getLines()))
+                    .withFrontMinus20(vision(angle, -0.20, start, 400, RewardGates.getLines()))
+                    .withFrontAdd40(vision(angle, 0.40, start, 400, RewardGates.getLines()))
+                    .withFrontMinus40(vision(angle, -0.40, start, 400, RewardGates.getLines()))
+                    .withFrontAdd60(vision(angle, 0.60, start, 400, RewardGates.getLines()))
+                    .withFrontMinus60(vision(angle, -0.60, start, 400, RewardGates.getLines()))
+                    .withFrontAdd80(vision(angle, 0.90, start, 400, RewardGates.getLines()))
+                    .withFrontMinus80(vision(angle, -0.90, start, 400, RewardGates.getLines()))
+                    .withFrontAdd100(vision(angle, 1.0, start, 400, RewardGates.getLines()))
+                    .withFrontMinus100(vision(angle, -1.0, start, 400, RewardGates.getLines()))
+                    .withFrontAdd120(vision(angle, 1.20, start, 400, RewardGates.getLines()))
+                    .withFrontMinus120(vision(angle, -1.20, start, 400, RewardGates.getLines()))
+                    .withFrontAdd140(vision(angle, 1.40, start, 400, RewardGates.getLines()))
+                    .withFrontMinus140(vision(angle, -1.40, start, 400, RewardGates.getLines()))
+                    .withFrontAdd160(vision(angle, 1.60, start, 400, RewardGates.getLines()))
+                    .withFrontMinus160(vision(angle, -1.60, start, 400, RewardGates.getLines()))
+                    .build()
             ).withDirectionX(
                 this.direction.x
             ).withDirectionY(
