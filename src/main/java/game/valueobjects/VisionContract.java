@@ -10,8 +10,20 @@ public class VisionContract {
 
     private final double frontAdd60;
     private final double frontMinus60;
-    private final double frontAdd90;
-    private final double frontMinus90;
+    private final double frontAdd80;
+    private final double frontMinus80;
+
+    private final double frontAdd100;
+    private final double frontMinus100;
+
+    private final double frontAdd120;
+    private final double frontMinus120;
+
+    private final double frontAdd140;
+    private final double frontMinus140;
+
+    private final double frontAdd160;
+    private final double frontMinus160;
 
     public VisionContract(
         double frontVision,
@@ -21,8 +33,16 @@ public class VisionContract {
         double frontMinus40,
         double frontAdd60,
         double frontMinus60,
-        double frontAdd90,
-        double frontMinus90
+        double frontAdd80,
+        double frontMinus80,
+        double frontAdd100,
+        double frontMinus100,
+        double frontAdd120,
+        double frontMinus120,
+        double frontAdd140,
+        double frontMinus140,
+        double frontAdd160,
+        double frontMinus160
     ) {
         this.frontVision = frontVision;
         this.frontAdd20 = frontAdd20;
@@ -32,8 +52,20 @@ public class VisionContract {
 
         this.frontAdd60 = frontAdd60;
         this.frontMinus60 = frontMinus60;
-        this.frontAdd90 = frontAdd90;
-        this.frontMinus90 = frontMinus90;
+        this.frontAdd80 = frontAdd80;
+        this.frontMinus80 = frontMinus80;
+
+        this.frontAdd100 = frontAdd100;
+        this.frontMinus100 = frontMinus100;
+
+        this.frontAdd120 = frontAdd120;
+        this.frontMinus120 = frontMinus120;
+
+        this.frontAdd140 = frontAdd140;
+        this.frontMinus140 = frontMinus140;
+
+        this.frontAdd160 = frontAdd160;
+        this.frontMinus160 = frontMinus160;
     }
 
     public double getFrontVision() {
@@ -68,12 +100,44 @@ public class VisionContract {
         return frontMinus60;
     }
 
-    public double getFrontAdd90() {
-        return frontAdd90;
+    public double getFrontAdd80() {
+        return frontAdd80;
     }
 
-    public double getFrontMinus90() {
-        return frontMinus90;
+    public double getFrontMinus80() {
+        return frontMinus80;
+    }
+
+    public double getFrontAdd100() {
+        return frontAdd100;
+    }
+
+    public double getFrontMinus100() {
+        return frontMinus100;
+    }
+
+    public double getFrontAdd120() {
+        return frontAdd120;
+    }
+
+    public double getFrontMinus120() {
+        return frontMinus120;
+    }
+
+    public double getFrontAdd140() {
+        return frontAdd140;
+    }
+
+    public double getFrontMinus140() {
+        return frontMinus140;
+    }
+
+    public double getFrontAdd160() {
+        return frontAdd160;
+    }
+
+    public double getFrontMinus160() {
+        return frontMinus160;
     }
 
     public static class Builder {
@@ -85,8 +149,20 @@ public class VisionContract {
 
         private double frontAdd60;
         private double frontMinus60;
-        private double frontAdd90;
-        private double frontMinus90;
+        private double frontAdd80;
+        private double frontMinus80;
+
+        private double frontAdd100;
+        private double frontMinus100;
+
+        private double frontAdd120;
+        private double frontMinus120;
+
+        private double frontAdd140;
+        private double frontMinus140;
+
+        private double frontAdd160;
+        private double frontMinus160;
 
         public Builder withFrontVision(double frontVision) {
             this.frontVision = frontVision;
@@ -124,13 +200,53 @@ public class VisionContract {
             return this;
         }
 
-        public Builder withFrontAdd90(double frontAdd90) {
-            this.frontAdd90 = frontAdd90;
+        public Builder withFrontAdd80(double frontAdd80) {
+            this.frontAdd80 = frontAdd80;
             return this;
         }
 
-        public Builder withFrontMinus90(double frontMinus90) {
-            this.frontMinus90 = frontMinus90;
+        public Builder withFrontMinus80(double frontMinus80) {
+            this.frontMinus80 = frontMinus80;
+            return this;
+        }
+
+        public Builder withFrontAdd100(double frontAdd100) {
+            this.frontAdd100 = frontAdd100;
+            return this;
+        }
+
+        public Builder withFrontMinus100(double frontMinus100) {
+            this.frontMinus100 = frontMinus100;
+            return this;
+        }
+
+        public Builder withFrontAdd120(double frontAdd120) {
+            this.frontAdd120 = frontAdd120;
+            return this;
+        }
+
+        public Builder withFrontMinus120(double frontMinus120) {
+            this.frontMinus120 = frontMinus120;
+            return this;
+        }
+
+        public Builder withFrontAdd140(double frontAdd140) {
+            this.frontAdd140 = frontAdd140;
+            return this;
+        }
+
+        public Builder withFrontMinus140(double frontMinus140) {
+            this.frontMinus140 = frontMinus140;
+            return this;
+        }
+
+        public Builder withFrontAdd160(double frontAdd160) {
+            this.frontAdd160 = frontAdd160;
+            return this;
+        }
+
+        public Builder withFrontMinus160(double frontMinus160) {
+            this.frontMinus160 = frontMinus160;
             return this;
         }
 
@@ -143,8 +259,16 @@ public class VisionContract {
                 frontMinus40,
                 frontAdd60,
                 frontMinus60,
-                frontAdd90,
-                frontMinus90
+                frontAdd80,
+                frontMinus80,
+                frontAdd100,
+                frontMinus100,
+                frontAdd120,
+                frontMinus120,
+                frontAdd140,
+                frontMinus140,
+                frontAdd160,
+                frontMinus160
             );
         }
     }
