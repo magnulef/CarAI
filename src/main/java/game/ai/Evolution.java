@@ -17,7 +17,7 @@ public class Evolution {
 
 
     public static final int SIMULATIONS = 8;
-    public static final int GENERATION_GROUP_SIZE = 100;
+    public static final int GENERATION_GROUP_SIZE = 200;
     private static final Track track = new Track();
     private static final RewardGates rewardGates = new RewardGates(false);
 

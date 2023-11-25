@@ -15,8 +15,8 @@ public class ImportInitialWeights {
             return null;
         }*/
 
-        return null;
-        //return PrintUtils.convert(JSON.fromJson(readFile(), PrintedWeights.class));
+        //return null;
+        return PrintUtils.convert(JSON.fromJson(readFile(), PrintedWeights.class));
         //return PrintUtils.convert(JSON.fromJson(json15sec, PrintedWeights.class));
     }
 
@@ -28,7 +28,7 @@ public class ImportInitialWeights {
         try {
             FileInputStream fis = new FileInputStream("src/main/resources/weights.txt");
             String s = IOUtils.toString(fis, "UTF-8");
-            System.out.println(s);
+            //System.out.println(s);
             return s;
         } catch (Exception exception) {
             System.out.println(exception.toString());

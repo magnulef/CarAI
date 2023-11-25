@@ -46,19 +46,34 @@ public class GenerationUtils {
 
         int top = cars.size() / 10;
         TopTask topTask = new TopTask(handler, top, cars);
-        MutationTask mutationTask01 = new MutationTask(0, top, 0.1, (float) random(), cars, handler);
-        MutationTask mutationTask10 = new MutationTask(0, top, 0.2, (float) random(), cars, handler);
-        ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
-        MutationTask mutationTask20 = new MutationTask(top, top * 4, 0.5, (float) random(), cars, handler);
-        MutationTask mutationTask30 = new MutationTask(top * 3, top * 5, 0.8, (float) random(), cars, handler);
 
-        EvolutionStatus.setThreadCount(6);
+        MutationTask mutationTask1 = new MutationTask(0, top, 0.1, (float) 0.0, cars, handler);
+        MutationTask mutationTask6 = new MutationTask(0, top, 0.2, (float) 0.0, cars, handler);
+
+        MutationTask mutationTask2 = new MutationTask(0, top, 0.1, (float) random(), cars, handler);
+        MutationTask mutationTask3 = new MutationTask(0, top, 0.15, (float) random(), cars, handler);
+        MutationTask mutationTask4 = new MutationTask(0, top, 0.20, (float) random(), cars, handler);
+        MutationTask mutationTask5 = new MutationTask(0, top, 0.20, (float) random(), cars, handler);
+        MutationTask mutationTask7 = new MutationTask(0, top, 0.20, (float) random(), cars, handler);
+        MutationTask mutationTask8 = new MutationTask(0, top, 0.20, (float) random(), cars, handler);
+
+        MutationTask mutationTask9 = new MutationTask(0, top, 0.30, (float) random(), cars, handler);
+        //ReproductionTask reproductionTask = new ReproductionTask(handler, top, cars);
+        //MutationTask mutationTask20 = new MutationTask(top, top * 3, 0.5, (float) random(), cars, handler);
+        //MutationTask mutationTask30 = new MutationTask(top * 3, top * 4, 0.8, (float) random(), cars, handler);
+
+        EvolutionStatus.setThreadCount(10);
         executor.execute(topTask);
-        executor.execute(mutationTask01);
-        executor.execute(mutationTask10);
-        executor.execute(reproductionTask);
-        executor.execute(mutationTask20);
-        executor.execute(mutationTask30);
+        executor.execute(mutationTask1);
+        executor.execute(mutationTask2);
+        executor.execute(mutationTask3);
+        executor.execute(mutationTask4);
+        //executor.execute(reproductionTask);
+        executor.execute(mutationTask5);
+        executor.execute(mutationTask6);
+        executor.execute(mutationTask7);
+        executor.execute(mutationTask8);
+        executor.execute(mutationTask9);
 
         runEvolution();
 
